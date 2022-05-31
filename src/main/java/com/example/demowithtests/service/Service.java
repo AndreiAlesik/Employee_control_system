@@ -4,7 +4,6 @@ import com.example.demowithtests.domain.Employee;
 
 import java.util.List;
 
-@org.springframework.stereotype.Service
 public interface Service {
 
     Employee create(Employee employee);
