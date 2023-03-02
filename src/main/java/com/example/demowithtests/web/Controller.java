@@ -2,6 +2,7 @@ package com.example.demowithtests.web;
 
 import com.example.demowithtests.domain.Employee;
 import com.example.demowithtests.service.Service;
+import com.example.demowithtests.util.WrongTypeOfDataException;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -33,25 +34,27 @@ public class Controller {
     //Получения юзера по id
     @GetMapping("/users/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public Employee getEmployeeById(@PathVariable Integer id) {
+    public Employee getEmployeeById(@PathVariable String id) throws WrongTypeOfDataException {
 
-        Employee employee = service.getById(id);
+        Integer parsedId = Integer.parseInt(id);
+        Employee employee = service.getById(parsedId);
         return employee;
     }
 
     //Обновление юзера
     @PutMapping("/users/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public Employee refreshEmployee(@PathVariable("id") Integer id, @RequestBody Employee employee) {
-
-        return service.updateById(id, employee);
+    public Employee refreshEmployee(@PathVariable("id") String id, @RequestBody Employee employee) throws WrongTypeOfDataException{
+        Integer parseId=Integer.parseInt(id);
+        return service.updateById(parseId, employee);
     }
 
     //Удаление по id
     @PatchMapping("/users/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void removeEmployeeById(@PathVariable Integer id) {
-        service.removeById(id);
+    public void removeEmployeeById(@PathVariable String id) {
+        Integer parseId=Integer.parseInt(id);
+        service.removeById(parseId);
     }
 
     //Удаление всех юзеров

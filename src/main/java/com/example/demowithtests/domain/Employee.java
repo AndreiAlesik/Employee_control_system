@@ -20,6 +20,15 @@ public class Employee {
     private String name;
     private String country;
     private String email;
+    private Boolean isDeleted=Boolean.FALSE;
+
+    public Boolean getIsDeleted() {
+        return isDeleted;
+    }
+
+    public void setIsDeleted(Boolean deleted) {
+        isDeleted = deleted;
+    }
 
     public Integer getId() {
         return id;

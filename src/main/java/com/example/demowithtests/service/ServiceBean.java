@@ -2,10 +2,13 @@ package com.example.demowithtests.service;
 
 import com.example.demowithtests.domain.Employee;
 import com.example.demowithtests.repository.Repository;
+import com.example.demowithtests.util.AccessException;
 import com.example.demowithtests.util.ResourceNotFoundException;
 import com.example.demowithtests.util.ResourceWasDeletedException;
+import com.example.demowithtests.util.WrongArgumentException;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.dao.DataAccessException;
 
 import javax.persistence.EntityNotFoundException;
 import java.util.List;
@@ -24,46 +27,74 @@ public class ServiceBean implements Service {
 
     @Override
     public List<Employee> getAll() {
-        return repository.findAll();
+        try {
+            return repository.findAll();
+        }
+        catch (NullPointerException e){
+            throw new ResourceNotFoundException();
+        }
+        catch (DataAccessException e){
+            throw new AccessException();
+        }
     }
 
     @Override
     public Employee getById(Integer id) {
-        Employee employee = repository.findById(id)
+        if(id==null){
+            throw new WrongArgumentException();
+        }
+        var employee = repository.findById(id)
                // .orElseThrow(() -> new EntityNotFoundException("Employee not found with id = " + id));
                 .orElseThrow(ResourceNotFoundException::new);
-         /*if (employee.getIsDeleted()) {
+         if (employee.getIsDeleted()) {
             throw new EntityNotFoundException("Employee was deleted with id = " + id);
-        }*/
+        }
         return employee;
     }
 
     @Override
     public Employee updateById(Integer id, Employee employee) {
-        return repository.findById(id)
-                .map(entity -> {
-                    entity.setName(employee.getName());
-                    entity.setEmail(employee.getEmail());
-                    entity.setCountry(employee.getCountry());
-                    return repository.save(entity);
-                })
-                .orElseThrow(() -> new EntityNotFoundException("Employee not found with id = " + id));
+        try {
+            return repository.findById(id)
+                    .map(entity -> {
+                        entity.setName(employee.getName());
+                        entity.setEmail(employee.getEmail());
+                        entity.setCountry(employee.getCountry());
+                        return repository.save(entity);
+                    })
+                    .orElseThrow(() -> new EntityNotFoundException("Employee not found with id = " + id));
+        }
+        catch(IllegalArgumentException e){
+            throw new WrongArgumentException();
+        }
+        catch(DataAccessException e){
+            throw new AccessException();
+        }
     }
 
     @Override
     public void removeById(Integer id) {
-        //repository.deleteById(id);
-        Employee employee = repository.findById(id)
-               // .orElseThrow(() -> new EntityNotFoundException("Employee not found with id = " + id));
-                .orElseThrow(ResourceWasDeletedException::new);
-        //employee.setIsDeleted(true);
-        repository.delete(employee);
-        //repository.save(employee);
+        try {
+            var employee = repository.findById(id)
+                    // .orElseThrow(() -> new EntityNotFoundException("Employee not found with id = " + id));
+                    .orElseThrow(ResourceWasDeletedException::new);
+            employee.setIsDeleted(true);
+            repository.save(employee);
+        }
+        catch (DataAccessException e){
+            throw new AccessException();
+        }
     }
 
     @Override
     public void removeAll() {
-        repository.deleteAll();
+        try {
+            repository.deleteAll();
+        }
+        catch (DataAccessException e){
+            throw new AccessException();
+        }
+
 
     }
 }
