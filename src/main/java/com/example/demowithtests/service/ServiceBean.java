@@ -11,6 +11,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataAccessException;
 
 import javax.persistence.EntityNotFoundException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @AllArgsConstructor
@@ -29,24 +31,22 @@ public class ServiceBean implements Service {
     public List<Employee> getAll() {
         try {
             return repository.findAll();
-        }
-        catch (NullPointerException e){
+        } catch (NullPointerException e) {
             throw new ResourceNotFoundException();
-        }
-        catch (DataAccessException e){
+        } catch (DataAccessException e) {
             throw new AccessException();
         }
     }
 
     @Override
     public Employee getById(Integer id) {
-        if(id==null){
+        if (id == null) {
             throw new WrongArgumentException();
         }
         var employee = repository.findById(id)
-               // .orElseThrow(() -> new EntityNotFoundException("Employee not found with id = " + id));
+                // .orElseThrow(() -> new EntityNotFoundException("Employee not found with id = " + id));
                 .orElseThrow(ResourceNotFoundException::new);
-         if (employee.getIsDeleted()) {
+        if (employee.getIsDeleted()) {
             throw new EntityNotFoundException("Employee was deleted with id = " + id);
         }
         return employee;
@@ -63,11 +63,9 @@ public class ServiceBean implements Service {
                         return repository.save(entity);
                     })
                     .orElseThrow(() -> new EntityNotFoundException("Employee not found with id = " + id));
-        }
-        catch(IllegalArgumentException e){
+        } catch (IllegalArgumentException e) {
             throw new WrongArgumentException();
-        }
-        catch(DataAccessException e){
+        } catch (DataAccessException e) {
             throw new AccessException();
         }
     }
@@ -80,8 +78,7 @@ public class ServiceBean implements Service {
                     .orElseThrow(ResourceWasDeletedException::new);
             employee.setIsDeleted(true);
             repository.save(employee);
-        }
-        catch (DataAccessException e){
+        } catch (DataAccessException e) {
             throw new AccessException();
         }
     }
@@ -90,11 +87,52 @@ public class ServiceBean implements Service {
     public void removeAll() {
         try {
             repository.deleteAll();
-        }
-        catch (DataAccessException e){
+        } catch (DataAccessException e) {
             throw new AccessException();
         }
 
 
+    }
+
+    @Override
+    public List<Employee> processor() {
+        log.info("replace null  - start");
+        List<Employee> replaceNull = repository.findEmployeeByIsDeletedNull();
+        log.info("replace null after replace: " + replaceNull);
+        for (Employee emp : replaceNull) {
+            emp.setIsDeleted(Boolean.FALSE);
+        }
+        log.info("replaceNull = {} ", replaceNull);
+        log.info("replace null  - end:");
+        return repository.saveAll(replaceNull);
+    }
+
+    @Override
+    public List<Employee> sendEmailByCountry(String country, String text) {
+        List<Employee> employees = repository.findEmployeeByCountry(country);
+        mailSender(extracted(employees), text);
+        return employees;
+    }
+
+    @Override
+    public List<Employee> sendEmailByCity(String city, String text) {
+        List<Employee> employees = repository.findEmployeeByAddresses(city);
+        mailSender(extracted(employees), text);
+        return employees;
+    }
+
+
+    private static List<String> extracted(List<Employee> employees) {
+        List<String> emails = new ArrayList<>();
+        //Arrays.asList();
+        for (Employee emp : employees) {
+            emails.add(emp.getEmail());
+        }
+        return emails;
+    }
+
+
+    public void mailSender(List<String> emails, String text) {
+        log.info("Emails were successfully sent");
     }
 }

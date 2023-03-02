@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+
+
 @RestController
 @AllArgsConstructor
 @RequestMapping(value = "/api", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -63,4 +65,25 @@ public class Controller {
     public void removeAllUsers() {
         service.removeAll();
     }
+
+
+    //@PatchMapping("/replaceNull")
+    @GetMapping("/replaceNull")
+    @ResponseStatus(HttpStatus.OK)
+    public void replaceNull(){
+        service.processor();
+    }
+
+    @PostMapping("/sendEmailByCountry")
+    @ResponseStatus(HttpStatus.OK)
+    public void sendEmailByCountry(@RequestParam String country, @RequestParam String text){
+        service.sendEmailByCountry(country, text);
+    }
+
+    @PostMapping("/sendEmailByCity")
+    @ResponseStatus(HttpStatus.OK)
+    public void sendEmailByCity(@RequestParam String city, @RequestParam String text){
+        service.sendEmailByCountry(city, text);
+    }
+
 }
