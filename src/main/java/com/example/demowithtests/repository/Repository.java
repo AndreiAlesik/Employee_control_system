@@ -20,4 +20,7 @@ public interface Repository extends JpaRepository<Employee, Integer> {
 
     @Query(value = "select e from Employee e join Address a where a.city=:city")
     List<Employee> findEmployeeByAddresses(String city);
+
+    @Query(value = "select * from users u join addresses a on u.id = a.employee_id where a.city=:city and u.is_deleted=false", nativeQuery = true)
+    List<Employee> findEmployeeByAddressesSQL(String city);
 }

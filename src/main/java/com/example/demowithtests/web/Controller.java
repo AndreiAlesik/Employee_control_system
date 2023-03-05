@@ -1,6 +1,8 @@
 package com.example.demowithtests.web;
 
+import com.example.demowithtests.domain.EmailDetails;
 import com.example.demowithtests.domain.Employee;
+import com.example.demowithtests.service.EmailService;
 import com.example.demowithtests.service.Service;
 import com.example.demowithtests.util.WrongTypeOfDataException;
 import lombok.AllArgsConstructor;
@@ -11,13 +13,13 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 
-
 @RestController
 @AllArgsConstructor
 @RequestMapping(value = "/api", produces = MediaType.APPLICATION_JSON_VALUE)
 public class Controller {
 
     private final Service service;
+    private final EmailService emailService;
 
     //Операция сохранения юзера в базу данных
     @PostMapping("/users")
@@ -46,8 +48,8 @@ public class Controller {
     //Обновление юзера
     @PutMapping("/users/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public Employee refreshEmployee(@PathVariable("id") String id, @RequestBody Employee employee) throws WrongTypeOfDataException{
-        Integer parseId=Integer.parseInt(id);
+    public Employee refreshEmployee(@PathVariable("id") String id, @RequestBody Employee employee) throws WrongTypeOfDataException {
+        Integer parseId = Integer.parseInt(id);
         return service.updateById(parseId, employee);
     }
 
@@ -55,7 +57,7 @@ public class Controller {
     @PatchMapping("/users/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void removeEmployeeById(@PathVariable String id) {
-        Integer parseId=Integer.parseInt(id);
+        Integer parseId = Integer.parseInt(id);
         service.removeById(parseId);
     }
 
@@ -70,20 +72,39 @@ public class Controller {
     //@PatchMapping("/replaceNull")
     @GetMapping("/replaceNull")
     @ResponseStatus(HttpStatus.OK)
-    public void replaceNull(){
+    public void replaceNull() {
         service.processor();
     }
 
     @PostMapping("/sendEmailByCountry")
     @ResponseStatus(HttpStatus.OK)
-    public void sendEmailByCountry(@RequestParam String country, @RequestParam String text){
+    public void sendEmailByCountry(@RequestParam String country, @RequestParam String text) {
         service.sendEmailByCountry(country, text);
     }
 
     @PostMapping("/sendEmailByCity")
     @ResponseStatus(HttpStatus.OK)
-    public void sendEmailByCity(@RequestParam String city, @RequestParam String text){
+    public void sendEmailByCity(@RequestParam String city, @RequestParam String text) {
         service.sendEmailByCountry(city, text);
     }
 
+    @PostMapping("sendEmailByCitySQL")
+    @ResponseStatus(HttpStatus.OK)
+    public void sendEmailByCitySQL(@RequestParam String city, @RequestParam String text) {
+        service.sendEmailByCitySQL(city, text);
+    }
+
+    @PostMapping("/sendMail")
+    @ResponseStatus(HttpStatus.OK)
+    public void sendMail(@RequestBody EmailDetails details,@RequestParam String city) {
+        emailService.sendSimpleMail(details, city);
+
+    }
+
+    @PostMapping("/sendMailWithAttachment")
+    @ResponseStatus(HttpStatus.OK)
+    public void sendMailWithAttachment(@RequestBody EmailDetails details,@RequestParam String city) {
+
+        emailService.sendMailWithAttachment(details, city);
+    }
 }

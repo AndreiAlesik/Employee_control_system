@@ -121,6 +121,13 @@ public class ServiceBean implements Service {
         return employees;
     }
 
+    @Override
+    public List<Employee> sendEmailByCitySQL(String city, String text) {
+        List<Employee> employees = repository.findEmployeeByAddressesSQL(city);
+        mailSender(extracted(employees), text);
+        return employees;
+    }
+
 
     private static List<String> extracted(List<Employee> employees) {
         List<String> emails = new ArrayList<>();
