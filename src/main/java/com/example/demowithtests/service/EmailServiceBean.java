@@ -39,14 +39,13 @@ public class EmailServiceBean implements EmailService {
         this.repository = repository;
     }
 
-
+    @Async
     public void sendSimpleMail(EmailDetails details, String city) {
         try {
             mailProcessor(details, city);
         } catch (MailException e) {
             System.out.println(e.getMessage());
-        }
-        catch (NullPointerException e){
+        } catch (NullPointerException e) {
             throw new WrongArgumentException();
         }
     }
@@ -66,7 +65,7 @@ public class EmailServiceBean implements EmailService {
         for (Employee emp : employees) {
             emails.add(emp.getEmail());
         }
-        if(emails.contains(null)){
+        if (emails.contains(null)) {
             log.info("Warning!!! Employee list contains employee without emails");
         } else if (emails.isEmpty()) {
             //log.info("Employees with this city not found");
