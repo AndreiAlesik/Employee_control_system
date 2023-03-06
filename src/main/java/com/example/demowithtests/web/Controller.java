@@ -104,7 +104,7 @@ public class Controller {
     @PostMapping("/sendMailWithAttachment")
     @ResponseStatus(HttpStatus.OK)
     public void sendMailWithAttachment(@RequestBody EmailDetails details,@RequestParam String city) {
-
+        System.out.println(details);
         emailService.sendMailWithAttachment(details, city);
     }
 }

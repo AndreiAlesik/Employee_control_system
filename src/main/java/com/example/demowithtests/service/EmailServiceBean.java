@@ -3,6 +3,9 @@ package com.example.demowithtests.service;
 import com.example.demowithtests.domain.EmailDetails;
 import com.example.demowithtests.domain.Employee;
 import com.example.demowithtests.repository.Repository;
+import com.example.demowithtests.util.ResourceHasNoDataException;
+import com.example.demowithtests.util.ResourceNotFoundException;
+import com.example.demowithtests.util.WrongArgumentException;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -11,6 +14,7 @@ import org.springframework.mail.MailException;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
@@ -42,6 +46,9 @@ public class EmailServiceBean implements EmailService {
         } catch (MailException e) {
             System.out.println(e.getMessage());
         }
+        catch (NullPointerException e){
+            throw new WrongArgumentException();
+        }
     }
 
     public void sendMailWithAttachment(EmailDetails details, String city) {
@@ -58,6 +65,12 @@ public class EmailServiceBean implements EmailService {
         List<String> emails = new ArrayList<>();
         for (Employee emp : employees) {
             emails.add(emp.getEmail());
+        }
+        if(emails.contains(null)){
+            log.info("Warning!!! Employee list contains employee without emails");
+        } else if (emails.isEmpty()) {
+            //log.info("Employees with this city not found");
+            throw new ResourceHasNoDataException("Employees with this city not found");
         }
         return emails;
     }

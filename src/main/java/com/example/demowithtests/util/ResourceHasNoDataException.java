@@ -5,4 +5,6 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 @ResponseStatus(HttpStatus.NO_CONTENT)
 public class ResourceHasNoDataException extends RuntimeException{
+    public ResourceHasNoDataException(String s) {
+    }
 }
