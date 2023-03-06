@@ -54,7 +54,7 @@ public class EmailServiceBean implements EmailService {
         try {
             mailProcessorWithAttachment(details, city);
         } catch (MessagingException e) {
-            log.info("Error while sending mail!!!");
+            log.info("Error while sending email!!!");
         }
     }
 
