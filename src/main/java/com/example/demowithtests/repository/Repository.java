@@ -23,4 +23,11 @@ public interface Repository extends JpaRepository<Employee, Integer> {
 
     @Query(value = "select * from users u join addresses a on u.id = a.employee_id where a.city=:city and u.is_deleted=false", nativeQuery = true)
     List<Employee> findEmployeeByAddressesSQL(String city);
+
+    @Query(value = "select * from users where id between ?1 and ?2", nativeQuery = true)
+    List<Employee> findEmployeeById(Integer startID, Integer endID);
+
+    @Query(value = "select * from users where id=:ID", nativeQuery = true)
+    List<Employee> findEmployeeByIdWithComparing(Integer ID);
+
 }

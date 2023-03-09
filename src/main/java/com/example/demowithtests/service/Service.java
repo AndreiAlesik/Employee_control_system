@@ -26,4 +26,11 @@ public interface Service {
 
     List<Employee> sendEmailByCitySQL(String city, String text);
 
+    void fillData();
+
+    void updateDataByID(Integer startID, Integer endID);
+
+
+    String patchById(Integer id, Employee employee);
+
 }

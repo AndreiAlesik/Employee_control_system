@@ -23,11 +23,13 @@ import javax.mail.internet.MimeMessage;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 @Service
 @Slf4j
 public class EmailServiceBean implements EmailService {
+
 
     private JavaMailSender javaMailSender;
     @Value("${spring.mail.username}")
@@ -39,7 +41,6 @@ public class EmailServiceBean implements EmailService {
         this.repository = repository;
     }
 
-    @Async
     public void sendSimpleMail(EmailDetails details, String city) {
         try {
             mailProcessor(details, city);
@@ -61,14 +62,11 @@ public class EmailServiceBean implements EmailService {
     public List<String> getEmailsList(String city) {
         List<Employee> employees = repository.findEmployeeByAddressesSQL(city);
         System.out.println(employees);
-        List<String> emails = new ArrayList<>();
-        for (Employee emp : employees) {
-            emails.add(emp.getEmail());
-        }
+        List<String> emails = employees.stream().map(Employee::getEmail).collect(Collectors.toList());
+        System.out.println(emails);
         if (emails.contains(null)) {
             log.info("Warning!!! Employee list contains employee without emails");
         } else if (emails.isEmpty()) {
-            //log.info("Employees with this city not found");
             throw new ResourceHasNoDataException("Employees with this city not found");
         }
         return emails;

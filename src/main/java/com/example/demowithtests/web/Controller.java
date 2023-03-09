@@ -6,13 +6,14 @@ import com.example.demowithtests.service.EmailService;
 import com.example.demowithtests.service.Service;
 import com.example.demowithtests.util.WrongTypeOfDataException;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-
+@Slf4j
 @RestController
 @AllArgsConstructor
 @RequestMapping(value = "/api", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -106,5 +107,40 @@ public class Controller {
     public void sendMailWithAttachment(@RequestBody EmailDetails details,@RequestParam String city) {
         System.out.println(details);
         emailService.sendMailWithAttachment(details, city);
+    }
+
+    @GetMapping("/fillData")
+    @ResponseStatus(HttpStatus.OK)
+    public void fillData(){
+        service.fillData();
+        log.info("Data successfully add");
+    }
+
+    @PutMapping("/updateByIDRange")
+    @ResponseStatus(HttpStatus.OK)
+    public void updateByIDRangePut(@RequestParam Integer startID, Integer endID){
+        service.updateDataByID(startID, endID);
+        log.info("Data successfully updated");
+    }
+
+    @PatchMapping("/updateByIDRangePatch")
+    @ResponseStatus(HttpStatus.OK)
+    public void updateByIDRangePatch(@RequestParam Integer startID, Integer endID){
+        service.updateDataByID(startID, endID);
+        log.info("Data successfully updated");
+    }
+
+    @GetMapping ("/updateByIDRangeGet")
+    @ResponseStatus(HttpStatus.OK)
+    public void updateByIDRangeGet(@RequestParam Integer startID, Integer endID){
+        service.updateDataByID(startID, endID);
+        log.info("Data successfully updated");
+    }
+
+    @PutMapping("/customUpdate")
+    @ResponseStatus(HttpStatus.OK)
+    public void customUpdate(@RequestParam Integer id, Employee employee){
+        service.patchById(id,employee);
+        log.info("Data updated");
     }
 }

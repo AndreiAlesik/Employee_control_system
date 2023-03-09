@@ -29,6 +29,13 @@ public class Employee {
     private Set<Address> addresses = new HashSet<>();
 
 
+    public Employee(String name, String country, String email, Boolean isDeleted) {
+        this.name = name;
+        this.country = country;
+        this.email = email;
+        this.isDeleted = isDeleted;
+    }
+
     public Boolean getIsDeleted() {
         return isDeleted;
     }

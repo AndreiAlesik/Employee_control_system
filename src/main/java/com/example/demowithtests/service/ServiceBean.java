@@ -14,6 +14,7 @@ import javax.persistence.EntityNotFoundException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @AllArgsConstructor
 @Slf4j
@@ -128,6 +129,51 @@ public class ServiceBean implements Service {
         return employees;
     }
 
+    @Override
+    public void fillData() {
+        for (int i = 0; i <= 100000; i++) {
+            Employee employee = new Employee("andrew", "Ukraine", "email@gmail.com", Boolean.FALSE);
+//            create(employee);
+            repository.save(employee);
+        }
+
+    }
+
+    @Override
+    public void updateDataByID(Integer startID, Integer endID) {
+        List<Employee> oldList = repository.findEmployeeById(startID, endID);
+        for (Employee tmp : oldList) {
+            tmp.setCountry("Poland");
+        }
+        repository.saveAll(oldList);
+
+    }
+
+    @Override
+    public String patchById(Integer id, Employee employee) {
+        var oldEmployee = repository.findEmployeeByIdWithComparing(id);
+        //System.out.println(employee);
+        if (oldEmployee.equals(employee)) {
+            return "nothing to change";
+        } else {
+            //System.out.println("start");
+            oldEmployee.stream().map(
+                    entity -> {
+                        if (employee.getName() != entity.getName()) {
+                            entity.setName(employee.getName());
+                        }
+                        if (employee.getEmail() != entity.getEmail())
+                            entity.setEmail(employee.getEmail());
+                        if (employee.getCountry() != entity.getCountry())
+                            entity.setCountry(employee.getCountry());
+                        return repository.save(entity);
+                    }
+            ).collect(Collectors.toList());
+            //System.out.println(oldEmployee);
+            return "Data has successfully updated";
+        }
+    }
+
 
     private static List<String> extracted(List<Employee> employees) {
         List<String> emails = new ArrayList<>();
@@ -142,4 +188,5 @@ public class ServiceBean implements Service {
     public void mailSender(List<String> emails, String text) {
         log.info("Emails were successfully sent");
     }
+
 }
