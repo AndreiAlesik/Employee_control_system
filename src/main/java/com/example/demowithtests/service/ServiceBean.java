@@ -9,11 +9,10 @@ import com.example.demowithtests.util.WrongArgumentException;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataAccessException;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityNotFoundException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @AllArgsConstructor
@@ -130,48 +129,77 @@ public class ServiceBean implements Service {
     }
 
     @Override
-    public void fillData() {
-        for (int i = 0; i <= 100000; i++) {
-            Employee employee = new Employee("andrew", "Ukraine", "email@gmail.com", Boolean.FALSE);
-//            create(employee);
-            repository.save(employee);
+    public void fillData(Integer quantities, Employee employee) {
+        for (int i = 0; i <= quantities; i++) {
+            Employee newEmployee = new Employee(employee.getName(), employee.getCountry(), employee.getEmail(), employee.getIsDeleted());
+            repository.save(newEmployee);
         }
 
     }
 
     @Override
-    public void updateDataByID(Integer startID, Integer endID) {
+    public void updateDataByID(Integer startID, Integer endID, String country) {
         List<Employee> oldList = repository.findEmployeeById(startID, endID);
         for (Employee tmp : oldList) {
-            tmp.setCountry("Poland");
+            tmp.setCountry(country);
         }
         repository.saveAll(oldList);
 
     }
 
+
+    @Override
+    public void rangeUpdate(Integer startID, Integer endID, Employee employee) {
+        for (int i = startID; i <= endID; i++)
+            patchById(i, employee);
+    }
+
+    // @Transactional
+    @Override
+    public void getGroupEmployeeAndUpdate(Integer startID, Integer endID, Employee newEmployee) {
+        List<Employee> employeeList = repository.findEmployeeById(startID, endID);
+        List<Employee> updatedEmployees = employeeList.stream().map(
+                entity -> {
+                    if (entity.equals(newEmployee)) {
+                        return null;
+                    }
+                    if (newEmployee.getName() != null && !newEmployee.getName().equals(entity.getName())) {
+                        entity.setName(newEmployee.getName());
+                    }
+                    if (newEmployee.getEmail() != null && !newEmployee.getEmail().equals(entity.getEmail())) {
+                        entity.setEmail(newEmployee.getEmail());
+                    }
+                    if (newEmployee.getCountry() != null && !newEmployee.getCountry().equals(entity.getCountry())) {
+                        entity.setCountry(newEmployee.getCountry());
+                    }
+                    return entity;
+                }
+        ).filter(Objects::nonNull).collect(Collectors.toList());
+
+        repository.saveAll(updatedEmployees);
+
+    }
+
+
     @Override
     public String patchById(Integer id, Employee employee) {
-        var oldEmployee = repository.findEmployeeByIdWithComparing(id);
-        //System.out.println(employee);
-        if (oldEmployee.equals(employee)) {
-            return "nothing to change";
-        } else {
-            //System.out.println("start");
-            oldEmployee.stream().map(
-                    entity -> {
-                        if (employee.getName() != entity.getName()) {
-                            entity.setName(employee.getName());
-                        }
-                        if (employee.getEmail() != entity.getEmail())
-                            entity.setEmail(employee.getEmail());
-                        if (employee.getCountry() != entity.getCountry())
-                            entity.setCountry(employee.getCountry());
-                        return repository.save(entity);
+        repository.findEmployeeByIdWithComparing(id).stream().map(
+                entity -> {
+                    if (entity.equals(employee))
+                        return entity;
+                    if (employee.getName() != entity.getName()) {
+                        entity.setName(employee.getName());
                     }
-            ).collect(Collectors.toList());
-            //System.out.println(oldEmployee);
-            return "Data has successfully updated";
-        }
+                    if (employee.getEmail() != entity.getEmail())
+                        entity.setEmail(employee.getEmail());
+                    if (employee.getCountry() != entity.getCountry())
+                        entity.setCountry(employee.getCountry());
+                    return repository.save(entity);
+                }
+        );
+        //System.out.println(oldEmployee);
+        return "Data has successfully updated";
+//        }
     }
 
 
@@ -189,4 +217,18 @@ public class ServiceBean implements Service {
         log.info("Emails were successfully sent");
     }
 
+
+    private String countryGenerate(String countries) {
+        Random random = new Random();
+        List<String> countryList = List.of(countries.split(", "));
+//        country.add("Poland");
+//        country.add("Ukraine");
+//        country.add("Germany");
+//        country.add("Belarus");
+//        country.add("Russia");
+//        country.add("Denmark");
+        System.out.println(countryList);
+        return countryList.get(random.ints(0, countryList.size() - 1).findFirst().getAsInt());
+//        return country.get(random.nextInt(0, country.size() - 1));
+    }
 }

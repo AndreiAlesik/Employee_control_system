@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 @Entity
@@ -101,5 +102,18 @@ public class Employee {
                 ", email='" + email + '\'' +
                 ", isDeleted=" + isDeleted +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Employee)) return false;
+        Employee employee = (Employee) o;
+        return Objects.equals(getName(), employee.getName()) && Objects.equals(getCountry(), employee.getCountry()) && Objects.equals(getEmail(), employee.getEmail()) && Objects.equals(getIsDeleted(), employee.getIsDeleted());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getName(), getCountry(), getEmail(), getIsDeleted());
     }
 }

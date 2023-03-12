@@ -40,7 +40,7 @@ public class EmailServiceBean implements EmailService {
         this.javaMailSender = javaMailSender;
         this.repository = repository;
     }
-
+    @Async
     public void sendSimpleMail(EmailDetails details, String city) {
         try {
             mailProcessor(details, city);

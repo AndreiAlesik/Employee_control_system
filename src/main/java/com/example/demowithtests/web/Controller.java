@@ -109,31 +109,31 @@ public class Controller {
         emailService.sendMailWithAttachment(details, city);
     }
 
-    @GetMapping("/fillData")
+        @PostMapping("/fillData")
     @ResponseStatus(HttpStatus.OK)
-    public void fillData(){
-        service.fillData();
+    public void fillData(@RequestParam Integer quantities, Employee employee){
+        service.fillData(quantities, employee);
         log.info("Data successfully add");
     }
 
     @PutMapping("/updateByIDRange")
     @ResponseStatus(HttpStatus.OK)
     public void updateByIDRangePut(@RequestParam Integer startID, Integer endID){
-        service.updateDataByID(startID, endID);
+        //service.updateDataByID(startID, endID);
         log.info("Data successfully updated");
     }
 
     @PatchMapping("/updateByIDRangePatch")
     @ResponseStatus(HttpStatus.OK)
     public void updateByIDRangePatch(@RequestParam Integer startID, Integer endID){
-        service.updateDataByID(startID, endID);
+        //service.updateDataByID(startID, endID);
         log.info("Data successfully updated");
     }
 
     @GetMapping ("/updateByIDRangeGet")
     @ResponseStatus(HttpStatus.OK)
-    public void updateByIDRangeGet(@RequestParam Integer startID, Integer endID){
-        service.updateDataByID(startID, endID);
+    public void updateByIDRangeGet(@RequestParam Integer startID, Integer endID,String country){
+        service.updateDataByID(startID, endID, country);
         log.info("Data successfully updated");
     }
 
@@ -142,5 +142,17 @@ public class Controller {
     public void customUpdate(@RequestParam Integer id, Employee employee){
         service.patchById(id,employee);
         log.info("Data updated");
+    }
+
+    @PutMapping("/test")
+    @ResponseStatus(HttpStatus.OK)
+    public void test(@RequestParam Integer startID, Integer endID, String countries){
+        service.updateDataByID(startID, endID, countries);
+    }
+
+    @PutMapping("/rangeUpdate")
+    @ResponseStatus(HttpStatus.OK)
+    public void testUpdate(@RequestParam Integer startID, Integer endID, Employee employee){
+        service.getGroupEmployeeAndUpdate(startID,endID,employee);
     }
 }

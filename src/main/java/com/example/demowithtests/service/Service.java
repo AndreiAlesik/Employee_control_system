@@ -26,11 +26,14 @@ public interface Service {
 
     List<Employee> sendEmailByCitySQL(String city, String text);
 
-    void fillData();
+    void fillData(Integer quantities, Employee employee);
 
-    void updateDataByID(Integer startID, Integer endID);
+    void updateDataByID(Integer startID, Integer endID, String country);
 
 
     String patchById(Integer id, Employee employee);
 
+    void rangeUpdate(Integer startID, Integer endID, Employee employee);
+
+    void getGroupEmployeeAndUpdate(Integer startID, Integer endID, Employee newEmployee);
 }

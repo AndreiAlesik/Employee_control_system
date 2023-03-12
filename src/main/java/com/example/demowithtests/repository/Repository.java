@@ -5,7 +5,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
-import java.util.Optional;
 
 @org.springframework.stereotype.Repository
 //@Component
@@ -30,4 +29,8 @@ public interface Repository extends JpaRepository<Employee, Integer> {
     @Query(value = "select * from users where id=:ID", nativeQuery = true)
     List<Employee> findEmployeeByIdWithComparing(Integer ID);
 
+    @Query(value ="select max(id) from users", nativeQuery = true)
+    Integer getMaxID();
+
+    List<Employee> findEmployeeByIdBetween(Integer startID, Integer endID);
 }
