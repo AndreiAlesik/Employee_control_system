@@ -2,7 +2,7 @@ package com.example.demowithtests;
 
 import com.example.demowithtests.domain.Employee;
 import com.example.demowithtests.repository.Repository;
-import com.example.demowithtests.web.Controller;
+import com.example.demowithtests.web.EmployeeControllerBean;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Ignore;
 import org.junit.jupiter.api.Test;
@@ -28,8 +28,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringRunner.class)
-@WebMvcTest(Controller.class)
-public class ControllerTests {
+@WebMvcTest(EmployeeControllerBean.class)
+public class EmployeeControllerBeanTests {
 
     @Autowired
     MockMvc mockMvc;

@@ -4,7 +4,7 @@ import com.example.demowithtests.domain.Employee;
 import com.example.demowithtests.dto.EmployeeDto;
 import com.example.demowithtests.dto.EmployeeReadDto;
 import com.example.demowithtests.service.Service;
-import com.example.demowithtests.util.WrongTypeOfDataException;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.http.HttpStatus;
@@ -13,20 +13,25 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import com.example.demowithtests.util.config.EntityMapper;
 
 
 @RestController
 @AllArgsConstructor
 @RequestMapping(value = "/api", produces = MediaType.APPLICATION_JSON_VALUE)
-public class Controller {
+@Tag(name = "Employee", description = "Employee API")
+public class EmployeeControllerBean implements EmployeeController {
 
     private final Service service;
     private final EntityMapper entityMapper;
 
+
     //Операция сохранения юзера в базу данных
+
     @PostMapping("/users")
     @ResponseStatus(HttpStatus.CREATED)
+    @Override
     public EmployeeDto saveEmployee(@RequestBody EmployeeDto employeeDto) {
         Employee employee = entityMapper.employeeDtoToEmployee(employeeDto);
         EmployeeDto dto = entityMapper.employeeToEmployeeDto(service.create(employee));
@@ -50,6 +55,7 @@ public class Controller {
     }
 
     //Получения юзера по id
+    @Override
     @GetMapping(value = "/users/{id}")
     @ResponseStatus(HttpStatus.OK)
     public EmployeeReadDto getEmployeeById(@PathVariable Integer id) {
@@ -63,7 +69,7 @@ public class Controller {
     @SneakyThrows
     @PutMapping("/users/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public EmployeeReadDto refreshEmployee(@PathVariable("id") String id, @RequestBody EmployeeDto employeeDto){
+    public EmployeeReadDto refreshEmployee(@PathVariable("id") String id, @RequestBody EmployeeDto employeeDto) {
         Integer parseId = Integer.parseInt(id);
         return entityMapper.employeeToEmployeeReadDto(
                 service.updateById(parseId, entityMapper.employeeDtoToEmployee(employeeDto)
@@ -75,7 +81,7 @@ public class Controller {
     @PatchMapping("/users/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void removeEmployeeById(@PathVariable String id) {
-        Integer parseId=Integer.parseInt(id);
+        Integer parseId = Integer.parseInt(id);
         service.removeById(parseId);
     }
 
@@ -90,20 +96,26 @@ public class Controller {
     //@PatchMapping("/replaceNull")
     @GetMapping("/replaceNull")
     @ResponseStatus(HttpStatus.OK)
-    public void replaceNull(){
+    public void replaceNull() {
         service.processor();
     }
 
     @PostMapping("/sendEmailByCountry")
     @ResponseStatus(HttpStatus.OK)
-    public void sendEmailByCountry(@RequestParam String country, @RequestParam String text){
+    public void sendEmailByCountry(@RequestParam String country, @RequestParam String text) {
         service.sendEmailByCountry(country, text);
     }
 
     @PostMapping("/sendEmailByCity")
     @ResponseStatus(HttpStatus.OK)
-    public void sendEmailByCity(@RequestParam String city, @RequestParam String text){
+    public void sendEmailByCity(@RequestParam String city, @RequestParam String text) {
         service.sendEmailByCountry(city, text);
+    }
+
+    @GetMapping("/metricsForEmployee")
+    @ResponseStatus(HttpStatus.OK)
+    public List<Employee> metrics(@RequestParam String country){
+        return service.metricsForEmployee(country);
     }
 
 }

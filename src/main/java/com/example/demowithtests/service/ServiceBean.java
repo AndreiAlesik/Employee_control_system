@@ -14,6 +14,7 @@ import javax.persistence.EntityNotFoundException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @AllArgsConstructor
 @Slf4j
@@ -119,6 +120,21 @@ public class ServiceBean implements Service {
         List<Employee> employees = repository.findEmployeeByAddresses(city);
         mailSender(extracted(employees), text);
         return employees;
+    }
+
+    @Override
+    public List<Employee> metricsForEmployee(String country) {
+        log.info("get");
+        List<Employee> allEmployee=repository.findEmployeeWhoChangedCountry(country);
+        //System.out.println(allEmployee);
+        log.info("start stream");
+        List<Employee> filtered=allEmployee.stream()
+                .filter(employee ->
+                        employee.getAddresses().stream()
+                                .anyMatch(address -> address.getCountry().equals(country)))
+                .collect(Collectors.toList());
+        System.out.println(filtered);
+        return null;
     }
 
 
