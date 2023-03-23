@@ -128,12 +128,12 @@ public class ServiceBean implements Service {
         List<Employee> allEmployee=repository.findEmployeeWhoChangedCountry(country);
         //System.out.println(allEmployee);
         log.info("start stream");
-        List<Employee> filtered=allEmployee.stream()
-                .filter(employee ->
-                        employee.getAddresses().stream()
-                                .anyMatch(address -> address.getCountry().equals(country)))
-                .collect(Collectors.toList());
-        System.out.println(filtered);
+
+//        List<Employee> employeesWithInactiveAddresses = allEmployee.stream()
+//                .filter(employee -> employee.getAddresses().stream()
+//                        .anyMatch(address -> address.getCountry().equals(country) && !address.getAddressHasActive()))
+//                .collect(Collectors.toList());
+        System.out.println(allEmployee);
         return null;
     }
 

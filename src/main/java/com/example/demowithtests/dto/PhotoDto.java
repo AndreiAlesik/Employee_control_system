@@ -15,16 +15,16 @@ import java.util.Date;
 @Builder
 @AllArgsConstructor
 public class PhotoDto {
-    @Schema(description = "Name of an employee.", example = "Billy", required = true)
+    @Schema(description = "Link of photo.", example = "http//...", required = true)
     public String linkPhoto;
-    @Schema(description = "Name of an employee.", example = "Billy", required = true)
+    @Schema(description = "Photo high.", example = "640", required = true)
     public Integer xHigh;
-    @Schema(description = "Name of an employee.", example = "Billy", required = true)
+    @Schema(description = "Photo width.", example = "700", required = true)
     public Integer yWidth;
-    @Schema(description = "Name of an employee.", example = "Billy", required = true)
-    public Date createDate = Date.from(Instant.now());
-    @Schema(description = "Name of an employee.", example = "Billy", required = true)
-    public Boolean isVisible = Boolean.TRUE;
+    @Schema(description = "Date of uploading.", example = "2020-01-01", required = true)
+    public Date createDate ;
+    @Schema(description = "Status of visibility.", example = "True|False", required = true)
+    public Boolean isVisible;
 }
 
 

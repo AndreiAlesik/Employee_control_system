@@ -33,6 +33,7 @@ public class EmployeeControllerBean implements EmployeeController {
     @ResponseStatus(HttpStatus.CREATED)
     @Override
     public EmployeeDto saveEmployee(@RequestBody EmployeeDto employeeDto) {
+        System.out.println(employeeDto);
         Employee employee = entityMapper.employeeDtoToEmployee(employeeDto);
         EmployeeDto dto = entityMapper.employeeToEmployeeDto(service.create(employee));
         System.out.println(dto);

@@ -18,11 +18,11 @@ public class EmployeeReadDto {
     public String name;
 
     //public String country;
-    @Schema(description = "Name of an employee.", example = "Billy", required = true)
+    @Schema(description = "Email of an employee.", example = "smth@gmail.com", required = true)
     public String email;
-    @Schema(description = "Name of an employee.", example = "Billy", required = true)
+    @Schema(description = "Photos.", example = "photos data", required = true)
     public Set<PhotoDto> photos = new HashSet<>();
-    @Schema(description = "Name of an employee.", example = "Billy", required = true)
+    @Schema(description = "Addresses.", example = "Addresses data", required = true)
     public Set<AddressDto> addresses = new HashSet<>();
 
 }

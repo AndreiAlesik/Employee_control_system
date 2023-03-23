@@ -12,18 +12,18 @@ import java.util.Date;
 @Setter
 @Builder
 public class AddressDto {
-    @Schema(description = "Name of an employee.", example = "Billy", required = true)
+    @Schema(description = "Id of an employee.", example = "Billy", required = true)
     public Long id;
-    @Schema(description = "Name of an employee.", example = "Billy", required = true)
+    @Schema(description = "Address status of an employee.", example = "False|True", required = true)
     public Boolean addressHasActive = Boolean.TRUE;
 
-    @Schema(description = "Name of an employee.", example = "Billy", required = true)
+    @Schema(description = "Country of an employee.", example = "Ukraine", required = true)
     public String country;
-    @Schema(description = "Name of an employee.", example = "Billy", required = true)
+    @Schema(description = "City of an employee.", example = "Kyiv", required = true)
     public String city;
-    @Schema(description = "Name of an employee.", example = "Billy", required = true)
+    @Schema(description = "Street of an employee.", example = "Parkova", required = true)
     public String street;
-    @Schema(description = "Name of an employee.", example = "Billy", required = true)
+    @Schema(description = "Date of registration.", example = "2023-10-10", required = true)
     //todo: dfhgjkdfhg Jira - 5544
     public Date date = Date.from(Instant.now());
 }
