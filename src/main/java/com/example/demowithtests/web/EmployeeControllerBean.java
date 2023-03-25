@@ -4,6 +4,7 @@ import com.example.demowithtests.domain.Employee;
 import com.example.demowithtests.dto.EmployeeDto;
 import com.example.demowithtests.dto.EmployeeReadDto;
 import com.example.demowithtests.service.Service;
+import com.example.demowithtests.util.config.orika.EmployeeConverter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
@@ -26,6 +27,7 @@ public class EmployeeControllerBean implements EmployeeController {
     private final Service service;
     private final EntityMapper entityMapper;
 
+    private final EmployeeConverter employeeConverter;
 
     //Операция сохранения юзера в базу данных
 
@@ -34,8 +36,8 @@ public class EmployeeControllerBean implements EmployeeController {
     @Override
     public EmployeeDto saveEmployee(@RequestBody EmployeeDto employeeDto) {
         System.out.println(employeeDto);
-        Employee employee = entityMapper.employeeDtoToEmployee(employeeDto);
-        EmployeeDto dto = entityMapper.employeeToEmployeeDto(service.create(employee));
+        var entity = employeeConverter.getMapperFacade().map(employeeDto, Employee.class);
+        var dto = employeeConverter.toDto(service.create(entity));
         System.out.println(dto);
         return dto;
     }
@@ -60,9 +62,8 @@ public class EmployeeControllerBean implements EmployeeController {
     @GetMapping(value = "/users/{id}")
     @ResponseStatus(HttpStatus.OK)
     public EmployeeReadDto getEmployeeById(@PathVariable Integer id) {
-        return entityMapper.employeeToEmployeeReadDto(
-                service.getById(id)
-        );
+        var employee = service.getById(id);
+        return employeeConverter.toReadDto(employee);
     }
 
 
