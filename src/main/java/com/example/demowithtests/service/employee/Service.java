@@ -1,4 +1,4 @@
-package com.example.demowithtests.service;
+package com.example.demowithtests.service.employee;
 
 import com.example.demowithtests.domain.Employee;
 
