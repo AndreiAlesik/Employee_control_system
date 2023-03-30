@@ -24,3 +24,12 @@ springdoc:
   api-docs:
     path: /v3/api-docs.yaml
 
+logging:
+  pattern:
+    console: "%d %-5Level %logger : %msg%n"
+  level:
+    com.example.demowithtests.service: info
+    com.example.demowithtests.web: info
+    org.springframework: warn
+    org.hibernate: info
+    org.apache.catalina.core: warn
