@@ -25,4 +25,7 @@ public interface EmployeeService {
     List<Employee> sendEmailByCity(String city, String text);
 
     List<Employee> metricsForEmployee(String country);
+
+    Employee addPassport(Integer employeeId);
+
 }

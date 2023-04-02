@@ -4,6 +4,7 @@ import com.example.demowithtests.domain.employee.Employee;
 import com.example.demowithtests.dto.employee.EmployeeDto;
 import com.example.demowithtests.dto.employee.EmployeeReadDto;
 import com.example.demowithtests.service.employee.EmployeeService;
+import com.example.demowithtests.util.mapper.EmployeeMapper;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
@@ -15,8 +16,6 @@ import org.springframework.web.bind.annotation.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.example.demowithtests.util.config.EntityMapper;
-
 
 @RestController
 @AllArgsConstructor
@@ -26,7 +25,7 @@ import com.example.demowithtests.util.config.EntityMapper;
 public class EmployeeControllerBean implements EmployeeController {
 
     private final EmployeeService employeeService;
-    private final EntityMapper entityMapper;
+    private final EmployeeMapper employeeMapper;
 
 
     @PostMapping("/users")
@@ -34,8 +33,8 @@ public class EmployeeControllerBean implements EmployeeController {
     @Override
     public EmployeeDto saveEmployee(@RequestBody EmployeeDto employeeDto) {
         log.info("Controller ==> saveEmployee() - start: employeeDto = {}", employeeDto);
-        Employee employee = entityMapper.employeeDtoToEmployee(employeeDto);
-        EmployeeDto dto = entityMapper.employeeToEmployeeDto(employeeService.create(employee));
+        Employee employee = employeeMapper.employeeDtoToEmployee(employeeDto);
+        EmployeeDto dto = employeeMapper.employeeToEmployeeDto(employeeService.create(employee));
         log.info("Controller ==> saveEmployee() - end: employeeReadDto = {}", dto);
         return dto;
     }
@@ -49,7 +48,7 @@ public class EmployeeControllerBean implements EmployeeController {
         List<EmployeeReadDto> employeesReadDto = new ArrayList<>();
         for (Employee employee : employees) {
             employeesReadDto.add(
-                    entityMapper.employeeToEmployeeReadDto(employee)
+                    employeeMapper.employeeToEmployeeReadDto(employee)
             );
         }
 
@@ -63,7 +62,7 @@ public class EmployeeControllerBean implements EmployeeController {
     @ResponseStatus(HttpStatus.OK)
     public EmployeeReadDto getEmployeeById(@PathVariable Integer id) {
         log.info("Controller ==> getEmployeeById() - start: id = {}", id);
-        EmployeeReadDto employeeReadDtoDto = entityMapper.employeeToEmployeeReadDto(
+        EmployeeReadDto employeeReadDtoDto = employeeMapper.employeeToEmployeeReadDto(
                 employeeService.getById(id)
         );
         log.info("Controller ==> getEmployeeById() - end: employeeReadDto = {}", employeeReadDtoDto);
@@ -78,8 +77,8 @@ public class EmployeeControllerBean implements EmployeeController {
     public EmployeeReadDto refreshEmployee(@PathVariable("id") String id, @RequestBody EmployeeDto employeeDto) {
         log.info("Controller ==> refreshEmployee() - start: id = {}, employeeDto = {}", id, employeeDto);
         Integer parseId = Integer.parseInt(id);
-        EmployeeReadDto employeeReadDto = entityMapper.employeeToEmployeeReadDto(
-                employeeService.updateById(parseId, entityMapper.employeeDtoToEmployee(employeeDto)
+        EmployeeReadDto employeeReadDto = employeeMapper.employeeToEmployeeReadDto(
+                employeeService.updateById(parseId, employeeMapper.employeeDtoToEmployee(employeeDto)
                 )
         );
         log.info("Controller ==> refreshEmployee() - end: id = {}, employeeReadDto = {}", id, employeeReadDto);

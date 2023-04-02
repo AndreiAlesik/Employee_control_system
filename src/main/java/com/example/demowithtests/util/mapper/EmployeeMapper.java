@@ -1,4 +1,4 @@
-package com.example.demowithtests.util.config;
+package com.example.demowithtests.util.mapper;
 
 import com.example.demowithtests.domain.employee.Address;
 import com.example.demowithtests.domain.employee.Employee;
@@ -12,8 +12,8 @@ import java.util.List;
 import java.util.Set;
 
 @Mapper(componentModel = "spring")
-public interface EntityMapper {
-    EntityMapper INSTANCE = Mappers.getMapper(EntityMapper.class);
+public interface EmployeeMapper {
+    EmployeeMapper INSTANCE = Mappers.getMapper(EmployeeMapper.class);
 
     EmployeeReadDto employeeToEmployeeReadDto(Employee employee);
     List<EmployeeReadDto> employeeToEmployeeReadDto(List<Employee> employeeList);

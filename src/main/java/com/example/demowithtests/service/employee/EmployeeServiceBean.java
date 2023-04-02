@@ -2,6 +2,8 @@ package com.example.demowithtests.service.employee;
 
 import com.example.demowithtests.domain.employee.Employee;
 import com.example.demowithtests.repository.EmployeeRepository;
+import com.example.demowithtests.repository.PassportRepository;
+import com.example.demowithtests.service.passport.PassportService;
 import com.example.demowithtests.util.AccessException;
 import com.example.demowithtests.util.ResourceNotFoundException;
 import com.example.demowithtests.util.ResourceWasDeletedException;
@@ -20,6 +22,10 @@ import java.util.List;
 public class EmployeeServiceBean implements EmployeeService {
 
     private final EmployeeRepository employeeRepository;
+
+    private final PassportRepository passportRepository;
+
+    private final PassportService passportService;
 
     @Override
     public Employee create(Employee employee) {
@@ -151,6 +157,34 @@ public class EmployeeServiceBean implements EmployeeService {
         log.debug("Service ==> metricsForEmployee() - end: allEmployee = {}", allEmployee);
         return null;
     }
+
+
+    @Override
+    public Employee addPassport(Integer employeeId) {
+        log.debug("Service ==> addPassport() - start: employeeId = {}", employeeId);
+        Employee employee = employeeRepository
+                .findById(employeeId)
+                .orElseThrow(ResourceNotFoundException::new);
+        checkIsFree();
+
+        employee.setPassport(
+                passportRepository.findAll().stream()
+                        .filter(e -> (e.getIsFree())).findFirst().orElseThrow(ResourceNotFoundException::new)
+        );
+        employee.getPassport().setIsFree(Boolean.FALSE);
+        employeeRepository.save(employee);
+        log.debug("Service ==> addPassport() - end: employee = {}", employee);
+        return employee;
+    }
+
+    private void checkIsFree() {
+        log.debug("Service ==> checkIsFree() - start: ");
+        if (passportRepository.getQuantityFreePassports() <= 5) {
+            passportService.fillPassports();
+        }
+        log.debug("Service ==> checkIsFree() - end: ");
+    }
+
 
 
     private static List<String> extracted(List<Employee> employees) {

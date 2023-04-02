@@ -1,5 +1,6 @@
 package com.example.demowithtests.domain.employee;
 
+import com.example.demowithtests.domain.passport.Passport;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -33,7 +34,9 @@ public class Employee {
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "employee_id")
     private Set<Photo> photos = new HashSet<>();
-
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "passport_id", referencedColumnName = "id")
+    private Passport passport;
 
     public Boolean getIsDeleted() {
         return isDeleted;
