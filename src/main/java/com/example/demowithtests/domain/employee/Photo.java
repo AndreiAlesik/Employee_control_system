@@ -1,4 +1,4 @@
-package com.example.demowithtests.domain;
+package com.example.demowithtests.domain.employee;
 
 import lombok.*;
 

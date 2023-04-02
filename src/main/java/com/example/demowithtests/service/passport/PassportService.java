@@ -1,9 +1,7 @@
 package com.example.demowithtests.service.passport;
 
 
-import com.example.demowithtests.domain.Employee;
-import com.example.demowithtests.domain.Passport;
-import com.example.demowithtests.repository.PassportRepository;
+import com.example.demowithtests.domain.passport.Passport;
 
 import java.util.List;
 

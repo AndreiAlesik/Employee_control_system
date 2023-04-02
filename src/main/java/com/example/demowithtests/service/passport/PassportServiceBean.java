@@ -1,10 +1,8 @@
 package com.example.demowithtests.service.passport;
 
-import com.example.demowithtests.domain.Employee;
-import com.example.demowithtests.domain.Passport;
+import com.example.demowithtests.domain.passport.Passport;
 import com.example.demowithtests.repository.PassportRepository;
 import com.example.demowithtests.util.AccessException;
-import com.example.demowithtests.util.ResourceNotFoundException;
 import com.example.demowithtests.util.WrongArgumentException;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

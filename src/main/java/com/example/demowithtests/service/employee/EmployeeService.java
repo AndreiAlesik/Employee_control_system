@@ -1,10 +1,10 @@
 package com.example.demowithtests.service.employee;
 
-import com.example.demowithtests.domain.Employee;
+import com.example.demowithtests.domain.employee.Employee;
 
 import java.util.List;
 
-public interface Service {
+public interface EmployeeService {
 
     Employee create(Employee employee);
 

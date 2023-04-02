@@ -1,7 +1,7 @@
 package com.example.demowithtests.service.employee;
 
-import com.example.demowithtests.domain.Employee;
-import com.example.demowithtests.repository.Repository;
+import com.example.demowithtests.domain.employee.Employee;
+import com.example.demowithtests.repository.EmployeeRepository;
 import com.example.demowithtests.util.AccessException;
 import com.example.demowithtests.util.ResourceNotFoundException;
 import com.example.demowithtests.util.ResourceWasDeletedException;
@@ -17,14 +17,14 @@ import java.util.List;
 @AllArgsConstructor
 @Slf4j
 @org.springframework.stereotype.Service
-public class ServiceBean implements Service {
+public class EmployeeServiceBean implements EmployeeService {
 
-    private final Repository repository;
+    private final EmployeeRepository employeeRepository;
 
     @Override
     public Employee create(Employee employee) {
         log.debug("Service ==> create() - start: employee = {}", employee);
-        Employee employeeCreated = repository.save(employee);
+        Employee employeeCreated = employeeRepository.save(employee);
         log.debug("Service ==> create() - end: employee = {}", employeeCreated);
         return employeeCreated;
     }
@@ -33,7 +33,7 @@ public class ServiceBean implements Service {
     public List<Employee> getAll() {
         log.debug("Service ==> getAll() - start: ");
         try {
-            List<Employee> allEmployees = repository.findAll();
+            List<Employee> allEmployees = employeeRepository.findAll();
             log.debug("Service ==> getAll() - end: ");
             return allEmployees;
         } catch (NullPointerException e) {
@@ -49,7 +49,7 @@ public class ServiceBean implements Service {
         if (id == null) {
             throw new WrongArgumentException();
         }
-        var employee = repository.findById(id)
+        var employee = employeeRepository.findById(id)
                 // .orElseThrow(() -> new EntityNotFoundException("Employee not found with id = " + id));
                 .orElseThrow(ResourceNotFoundException::new);
         if (employee.getIsDeleted()) {
@@ -63,13 +63,13 @@ public class ServiceBean implements Service {
     public Employee updateById(Integer id, Employee employee) {
         log.debug("Service ==> updateById() - start: id = {}, employee = {}", id, employee);
         try {
-            return repository.findById(id)
+            return employeeRepository.findById(id)
                     .map(entity -> {
                         entity.setName(employee.getName());
                         entity.setEmail(employee.getEmail());
                         entity.setCountry(employee.getCountry());
                         log.debug("Service ==> updateById() - end: employee = {}", entity);
-                        return repository.save(entity);
+                        return employeeRepository.save(entity);
                     })
                     .orElseThrow(() -> new EntityNotFoundException("Employee not found with id = " + id));
         } catch (IllegalArgumentException e) {
@@ -83,11 +83,11 @@ public class ServiceBean implements Service {
     public void removeById(Integer id) {
         log.debug("Service ==> removeById() - start: id = {}", id);
         try {
-            var employee = repository.findById(id)
+            var employee = employeeRepository.findById(id)
                     // .orElseThrow(() -> new EntityNotFoundException("Employee not found with id = " + id));
                     .orElseThrow(ResourceWasDeletedException::new);
             employee.setIsDeleted(true);
-            repository.save(employee);
+            employeeRepository.save(employee);
             log.debug("Service ==> removeById() - end: deleted employee = {}", employee);
         } catch (DataAccessException e) {
             throw new AccessException();
@@ -98,7 +98,7 @@ public class ServiceBean implements Service {
     public void removeAll() {
         log.debug("Service ==> removeAll() - start: ");
         try {
-            repository.deleteAll();
+            employeeRepository.deleteAll();
             log.debug("Service ==> removeAll() - end: ");
         } catch (DataAccessException e) {
             throw new AccessException();
@@ -109,20 +109,20 @@ public class ServiceBean implements Service {
     @Override
     public List<Employee> processor() {
         log.debug("replace null  - start");
-        List<Employee> replaceNull = repository.findEmployeeByIsDeletedNull();
+        List<Employee> replaceNull = employeeRepository.findEmployeeByIsDeletedNull();
         log.debug("replace null after replace: " + replaceNull);
         for (Employee emp : replaceNull) {
             emp.setIsDeleted(Boolean.FALSE);
         }
         log.debug("replaceNull = {} ", replaceNull);
         log.debug("replace null  - end:");
-        return repository.saveAll(replaceNull);
+        return employeeRepository.saveAll(replaceNull);
     }
 
     @Override
     public List<Employee> sendEmailByCountry(String country, String text) {
         log.debug("Service ==> sendEmailByCountry() - start: country = {}, text = {}", country, text);
-        List<Employee> employees = repository.findEmployeeByCountry(country);
+        List<Employee> employees = employeeRepository.findEmployeeByCountry(country);
         mailSender(extracted(employees), text);
         log.debug("Service ==> sendEmailByCountry() - end: employees = {}", employees);
         return employees;
@@ -131,7 +131,7 @@ public class ServiceBean implements Service {
     @Override
     public List<Employee> sendEmailByCity(String city, String text) {
         log.debug("Service ==> sendEmailByCity() - start: city = {}, text = {}", city, text);
-        List<Employee> employees = repository.findEmployeeByAddresses(city);
+        List<Employee> employees = employeeRepository.findEmployeeByAddresses(city);
         mailSender(extracted(employees), text);
         log.debug("Service ==> sendEmailByCity() - end: employees = {}", employees);
         return employees;
@@ -141,7 +141,7 @@ public class ServiceBean implements Service {
     public List<Employee> metricsForEmployee(String country) {
 
         log.debug("Service ==> metricsForEmployee() - start: country = {}", country);
-        List<Employee> allEmployee = repository.findEmployeeWhoChangedCountry(country);
+        List<Employee> allEmployee = employeeRepository.findEmployeeWhoChangedCountry(country);
         //System.out.println(allEmployee);
 
 //        List<Employee> employeesWithInactiveAddresses = allEmployee.stream()

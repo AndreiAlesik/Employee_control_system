@@ -1,7 +1,7 @@
 package com.example.demowithtests;
 
-import com.example.demowithtests.domain.Employee;
-import com.example.demowithtests.repository.Repository;
+import com.example.demowithtests.domain.employee.Employee;
+import com.example.demowithtests.repository.EmployeeRepository;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
@@ -16,10 +16,10 @@ import java.util.Optional;
 
 @DataJpaTest
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class RepositoryTests {
+public class EmployeeRepositoryTests {
 
     @Autowired
-    private Repository repository;
+    private EmployeeRepository employeeRepository;
 
     @Test
     @Order(1)
@@ -28,7 +28,7 @@ public class RepositoryTests {
 
         Employee employee = Employee.builder().name("Mark").country("England").build();
 
-        repository.save(employee);
+        employeeRepository.save(employee);
 
         Assertions.assertThat(employee.getId()).isGreaterThan(0);
     }
@@ -37,7 +37,7 @@ public class RepositoryTests {
     @Order(2)
     public void getEmployeeTest() {
 
-        Employee employee = repository.findById(1).orElseThrow();
+        Employee employee = employeeRepository.findById(1).orElseThrow();
 
         Assertions.assertThat(employee.getId()).isEqualTo(1);
 
@@ -47,7 +47,7 @@ public class RepositoryTests {
     @Order(3)
     public void getListOfEmployeeTest() {
 
-        List<Employee> employeesList = repository.findAll();
+        List<Employee> employeesList = employeeRepository.findAll();
 
         Assertions.assertThat(employeesList.size()).isGreaterThan(0);
 
@@ -58,10 +58,10 @@ public class RepositoryTests {
     @Rollback(value = false)
     public void updateEmployeeTest() {
 
-        Employee employee = repository.findById(1).get();
+        Employee employee = employeeRepository.findById(1).get();
 
         employee.setName("Martin");
-        Employee employeeUpdated = repository.save(employee);
+        Employee employeeUpdated = employeeRepository.save(employee);
 
         Assertions.assertThat(employeeUpdated.getName()).isEqualTo("Martin");
 
@@ -72,15 +72,15 @@ public class RepositoryTests {
     @Rollback(value = false)
     public void deleteEmployeeTest() {
 
-        Employee employee = repository.findById(1).get();
+        Employee employee = employeeRepository.findById(1).get();
 
-        repository.delete(employee);
+        employeeRepository.delete(employee);
 
         //repository.deleteById(1L);
 
         Employee employee1 = null;
 
-        Optional<Employee> optionalAuthor = Optional.ofNullable(repository.findByName("Martin"));
+        Optional<Employee> optionalAuthor = Optional.ofNullable(employeeRepository.findByName("Martin"));
 
         if (optionalAuthor.isPresent()) {
             employee1 = optionalAuthor.get();
