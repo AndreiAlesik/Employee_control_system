@@ -28,8 +28,8 @@ public class EmployeeControllerBean implements EmployeeController {
     private final EmployeeMapper employeeMapper;
 
 
-    @PostMapping("/users")
-    @ResponseStatus(HttpStatus.CREATED)
+
+
     @Override
     public EmployeeDto saveEmployee(@RequestBody EmployeeDto employeeDto) {
         log.info("Controller ==> saveEmployee() - start: employeeDto = {}", employeeDto);
@@ -58,8 +58,6 @@ public class EmployeeControllerBean implements EmployeeController {
 
 
     @Override
-    @GetMapping(value = "/users/{id}")
-    @ResponseStatus(HttpStatus.OK)
     public EmployeeReadDto getEmployeeById(@PathVariable Integer id) {
         log.info("Controller ==> getEmployeeById() - start: id = {}", id);
         EmployeeReadDto employeeReadDtoDto = employeeMapper.employeeToEmployeeReadDto(
@@ -72,8 +70,6 @@ public class EmployeeControllerBean implements EmployeeController {
 
     //Обновление юзера
     @SneakyThrows
-    @PutMapping("/users/{id}")
-    @ResponseStatus(HttpStatus.OK)
     public EmployeeReadDto refreshEmployee(@PathVariable("id") String id, @RequestBody EmployeeDto employeeDto) {
         log.info("Controller ==> refreshEmployee() - start: id = {}, employeeDto = {}", id, employeeDto);
         Integer parseId = Integer.parseInt(id);
@@ -86,8 +82,7 @@ public class EmployeeControllerBean implements EmployeeController {
     }
 
     //Удаление по id
-    @PatchMapping("/users/{id}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
+   @Override
     public void removeEmployeeById(@PathVariable String id) {
         log.info("Controller ==> removeEmployeeById() - start: id = {}", id);
         Integer parseId = Integer.parseInt(id);
@@ -97,8 +92,7 @@ public class EmployeeControllerBean implements EmployeeController {
     }
 
     //Удаление всех юзеров
-    @DeleteMapping("/users")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
+
     public void removeAllUsers() {
         log.info("Controller ==> removeAllUsers() - start: ");
         employeeService.removeAll();
@@ -107,24 +101,21 @@ public class EmployeeControllerBean implements EmployeeController {
 
 
     //@PatchMapping("/replaceNull")
-    @GetMapping("/replaceNull")
-    @ResponseStatus(HttpStatus.OK)
+
     public void replaceNull() {
         log.info("Controller ==> replaceNull() - start: ");
         employeeService.processor();
         log.info("Controller ==> replaceNull() - end: ");
     }
 
-    @PostMapping("/sendEmailByCountry")
-    @ResponseStatus(HttpStatus.OK)
+
     public void sendEmailByCountry(@RequestParam String country, @RequestParam String text) {
         log.info("Controller ==> sendEmailByCountry() - start: country = {}, text = {}", country,text);
         employeeService.sendEmailByCountry(country, text);
         log.info("Controller ==> sendEmailByCountry() - end: ");
     }
 
-    @PostMapping("/sendEmailByCity")
-    @ResponseStatus(HttpStatus.OK)
+
     public void sendEmailByCity(@RequestParam String city, @RequestParam String text) {
         log.info("Controller ==> sendEmailByCity() - start: city = {}, text = {}", city);
         employeeService.sendEmailByCountry(city, text);
