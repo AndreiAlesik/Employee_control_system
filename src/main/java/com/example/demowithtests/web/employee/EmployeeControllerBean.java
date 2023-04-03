@@ -28,8 +28,6 @@ public class EmployeeControllerBean implements EmployeeController {
     private final EmployeeMapper employeeMapper;
 
 
-
-
     @Override
     public EmployeeDto saveEmployee(@RequestBody EmployeeDto employeeDto) {
         log.info("Controller ==> saveEmployee() - start: employeeDto = {}", employeeDto);
@@ -82,7 +80,7 @@ public class EmployeeControllerBean implements EmployeeController {
     }
 
     //Удаление по id
-   @Override
+    @Override
     public void removeEmployeeById(@PathVariable String id) {
         log.info("Controller ==> removeEmployeeById() - start: id = {}", id);
         Integer parseId = Integer.parseInt(id);
@@ -110,7 +108,7 @@ public class EmployeeControllerBean implements EmployeeController {
 
 
     public void sendEmailByCountry(@RequestParam String country, @RequestParam String text) {
-        log.info("Controller ==> sendEmailByCountry() - start: country = {}, text = {}", country,text);
+        log.info("Controller ==> sendEmailByCountry() - start: country = {}, text = {}", country, text);
         employeeService.sendEmailByCountry(country, text);
         log.info("Controller ==> sendEmailByCountry() - end: ");
     }
@@ -122,11 +120,19 @@ public class EmployeeControllerBean implements EmployeeController {
         log.info("Controller ==> sendEmailByCity() - end: ");
     }
 
+    @Override
+    public EmployeeReadDto addWorkplace(Integer employeeId, Integer workplaceId) {
+        log.info("Controller ==> addWorkplace() - start: employeeId = {}, workplaceId = {}", employeeId, workplaceId);
+        var employeeReadDto = employeeMapper.employeeToEmployeeReadDto(employeeService.addWorkplace(employeeId, workplaceId));
+        log.info("Controller ==> addWorkplace() - end: employeeReadDto = {}", employeeReadDto);
+        return employeeReadDto;
+    }
+
     @GetMapping("/metricsForEmployee")
     @ResponseStatus(HttpStatus.OK)
     public List<Employee> metrics(@RequestParam String country) {
         log.info("Controller ==> metrics() - start: country = {}", country);
-        List<Employee> statistics= employeeService.metricsForEmployee(country);
+        List<Employee> statistics = employeeService.metricsForEmployee(country);
         log.info("Controller ==> metrics() - end: statistics = {}", country);
         return statistics;
     }

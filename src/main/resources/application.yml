@@ -26,10 +26,10 @@ springdoc:
 
 logging:
   pattern:
-    console: "%d %-5Level %logger : %msg%n"
+    console:  "%d{ISO8601} %-5level %logger{1.} - %msg%n"
   level:
-    com.example.demowithtests.service: off
-    com.example.demowithtests.web: off
-    org.springframework: off
-    org.hibernate: off
-    org.apache.catalina.core: off
+    com.example.demowithtests.service: debug
+    com.example.demowithtests.web: info
+    org.springframework: info
+    org.hibernate: info
+    org.apache.catalina.core: info

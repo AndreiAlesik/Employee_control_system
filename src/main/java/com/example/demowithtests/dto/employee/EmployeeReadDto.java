@@ -1,5 +1,7 @@
 package com.example.demowithtests.dto.employee;
 
+import com.example.demowithtests.domain.office.Workplace;
+import com.example.demowithtests.dto.workplace.WorkplaceResponseDto;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -24,5 +26,7 @@ public class EmployeeReadDto {
     public Set<PhotoDto> photos = new HashSet<>();
     @Schema(description = "Addresses.", example = "Addresses data", required = true)
     public Set<AddressDto> addresses = new HashSet<>();
+
+    public Set<WorkplaceResponseDto> workplaces;
 
 }

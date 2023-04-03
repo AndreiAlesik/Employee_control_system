@@ -1,6 +1,7 @@
 package com.example.demowithtests.service.employee;
 
 import com.example.demowithtests.domain.employee.Employee;
+import com.example.demowithtests.domain.office.Workplace;
 
 import java.util.List;
 
@@ -27,5 +28,7 @@ public interface EmployeeService {
     List<Employee> metricsForEmployee(String country);
 
     Employee addPassport(Integer employeeId);
+
+    Employee addWorkplace(Integer employeeId, Integer workplaceId);
 
 }

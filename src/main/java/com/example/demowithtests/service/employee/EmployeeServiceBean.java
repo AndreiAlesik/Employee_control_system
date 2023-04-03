@@ -1,9 +1,11 @@
 package com.example.demowithtests.service.employee;
 
 import com.example.demowithtests.domain.employee.Employee;
+import com.example.demowithtests.domain.office.Workplace;
 import com.example.demowithtests.repository.EmployeeRepository;
 import com.example.demowithtests.repository.PassportRepository;
 import com.example.demowithtests.service.passport.PassportService;
+import com.example.demowithtests.service.workplace.WorkplaceService;
 import com.example.demowithtests.util.AccessException;
 import com.example.demowithtests.util.ResourceNotFoundException;
 import com.example.demowithtests.util.ResourceWasDeletedException;
@@ -26,6 +28,8 @@ public class EmployeeServiceBean implements EmployeeService {
     private final PassportRepository passportRepository;
 
     private final PassportService passportService;
+
+    private final WorkplaceService workplaceService;
 
     @Override
     public Employee create(Employee employee) {
@@ -177,6 +181,18 @@ public class EmployeeServiceBean implements EmployeeService {
         return employee;
     }
 
+    @Override
+    public Employee addWorkplace(Integer employeeId, Integer workplaceId) {
+        log.debug("Service ==> addWorkplace() - start: employeeId = {}, workplaceId = {}", employeeId, workplaceId);
+        Employee employee = employeeRepository.findById(employeeId)
+                .orElseThrow(ResourceNotFoundException::new);
+        Workplace workplace=workplaceService.getById(workplaceId);
+        employee.getWorkplaces().add(workplace);
+        employeeRepository.save(employee);
+        log.debug("Service ==> addWorkplace() - end: employee = {}", employee);
+        return employee;
+    }
+
     private void checkIsFree() {
         log.debug("Service ==> checkIsFree() - start: ");
         if (passportRepository.getQuantityFreePassports() <= 5) {
@@ -184,7 +200,6 @@ public class EmployeeServiceBean implements EmployeeService {
         }
         log.debug("Service ==> checkIsFree() - end: ");
     }
-
 
 
     private static List<String> extracted(List<Employee> employees) {

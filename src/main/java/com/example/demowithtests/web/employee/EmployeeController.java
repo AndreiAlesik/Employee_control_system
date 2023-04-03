@@ -81,4 +81,13 @@ public interface EmployeeController {
     @PostMapping("/sendEmailByCity")
     @ResponseStatus(HttpStatus.OK)
     void sendEmailByCity(@RequestParam String city, @RequestParam String text);
+
+    @Operation(summary = "This is endpoint to send mail by city to employee.", description = "Create request to send mail by city employee.", tags = {"Employee"})
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "Email successfully sent."),
+            @ApiResponse(responseCode = "400", description = "Invalid input"),
+            @ApiResponse(responseCode = "404", description = "NOT FOUND. Specified employee request not found.")})
+    @PostMapping("/employee/{id}/workplace/{workplaceId}")
+    @ResponseStatus(HttpStatus.OK)
+    EmployeeReadDto addWorkplace(@PathVariable("id") Integer id, @PathVariable("workplaceId") Integer workplaceId);
 }
