@@ -28,9 +28,4 @@ public class EmployeeDto {
     @Schema(description = "Set of addresses of an employee.", example = "addresses", required = true)
     public Set<AddressDto> addresses = new HashSet<>();
 
-
-    public EmployeeDto() {
-
-    }
-    //public Date creationTime = Date.from(Instant.now());
 }
