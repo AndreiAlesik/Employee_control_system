@@ -6,10 +6,7 @@ import com.example.demowithtests.repository.EmployeeRepository;
 import com.example.demowithtests.repository.PassportRepository;
 import com.example.demowithtests.service.passport.PassportService;
 import com.example.demowithtests.service.workplace.WorkplaceService;
-import com.example.demowithtests.util.AccessException;
-import com.example.demowithtests.util.ResourceNotFoundException;
-import com.example.demowithtests.util.ResourceWasDeletedException;
-import com.example.demowithtests.util.WrongArgumentException;
+import com.example.demowithtests.util.*;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataAccessException;
@@ -34,6 +31,7 @@ public class EmployeeServiceBean implements EmployeeService {
     @Override
     public Employee create(Employee employee) {
         log.debug("Service ==> create() - start: employee = {}", employee);
+        employee.setIsDeleted(Boolean.FALSE);
         Employee employeeCreated = employeeRepository.save(employee);
         log.debug("Service ==> create() - end: employee = {}", employeeCreated);
         return employeeCreated;
@@ -187,8 +185,14 @@ public class EmployeeServiceBean implements EmployeeService {
         Employee employee = employeeRepository.findById(employeeId)
                 .orElseThrow(ResourceNotFoundException::new);
         Workplace workplace=workplaceService.getById(workplaceId);
-        employee.getWorkplaces().add(workplace);
-        employeeRepository.save(employee);
+        if(employeeRepository.checkFreeSittingsInWorkplace(workplaceId)<workplace.getAvailableSittingPlaces() &&
+            workplace.getAvailableSittingPlaces()>0) {
+            employee.getWorkplaces().add(workplace);
+            workplace.setAvailableSittingPlaces(workplace.getAvailableSittingPlaces()-1);
+            employeeRepository.save(employee);
+        }
+        else
+            throw new ResourceHasNoDataException("No free place in this workplace");
         log.debug("Service ==> addWorkplace() - end: employee = {}", employee);
         return employee;
     }

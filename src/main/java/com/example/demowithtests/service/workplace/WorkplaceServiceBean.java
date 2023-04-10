@@ -18,7 +18,7 @@ public class WorkplaceServiceBean implements WorkplaceService {
     @Override
     public Workplace create(Workplace workplace) {
         log.debug("Service ==> create() - start: workplace = {}", workplace);
-        //workplace.setIsFree(Boolean.TRUE);
+        workplace.setIsActive(Boolean.TRUE);
         Workplace savedWorkplace = workplaceRepository.save(workplace);
         log.debug("Service ==> create() - end: workplace = {}", savedWorkplace);
         return savedWorkplace;

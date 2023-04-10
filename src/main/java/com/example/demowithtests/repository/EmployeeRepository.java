@@ -26,4 +26,9 @@ public interface EmployeeRepository extends JpaRepository<Employee, Integer> {
 //            "where  addresses.country=:country"
             , nativeQuery = true)
     List<Employee> findEmployeeWhoChangedCountry(String country);
+
+    @Query(value =
+            "select count(*) from users_workplaces where workplaces_id=:workplaceID"
+            , nativeQuery = true)
+    Integer checkFreeSittingsInWorkplace(Integer workplaceID);
 }

@@ -123,6 +123,7 @@ public class EmployeeControllerBean implements EmployeeController {
     @Override
     public EmployeeReadDto addWorkplace(Integer employeeId, Integer workplaceId) {
         log.info("Controller ==> addWorkplace() - start: employeeId = {}, workplaceId = {}", employeeId, workplaceId);
+
         var employeeReadDto = employeeMapper.employeeToEmployeeReadDto(employeeService.addWorkplace(employeeId, workplaceId));
         log.info("Controller ==> addWorkplace() - end: employeeReadDto = {}", employeeReadDto);
         return employeeReadDto;

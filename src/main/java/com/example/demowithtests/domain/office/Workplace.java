@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
+import java.time.OffsetDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -24,6 +25,9 @@ public class Workplace {
     private String name;
     private String address;
     private Boolean isActive=Boolean.TRUE;
+    private OffsetDateTime startTimeReservation;
+    private OffsetDateTime endTimeReservation;
+    private Integer availableSittingPlaces;
 
     @ManyToMany(cascade = CascadeType.ALL, mappedBy = "workplaces")
     @JsonIgnore

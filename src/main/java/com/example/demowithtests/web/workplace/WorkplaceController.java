@@ -9,7 +9,10 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.http.HttpStatus;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 
 public interface WorkplaceController {
     @Operation(summary = "This is endpoint to add a new employee.", description = "Create request to add a new employee.", tags = {"Employee"})
@@ -20,7 +23,7 @@ public interface WorkplaceController {
             @ApiResponse(responseCode = "409", description = "Employee already exists")})
     @PostMapping("/workplace")
     @ResponseStatus(HttpStatus.CREATED)
-    WorkplaceResponseDto saveWorkplace(@RequestBody WorkplaceRequestDto workplaceRequestDto);
+    WorkplaceResponseDto saveWorkplace(@RequestBody @Valid WorkplaceRequestDto workplaceRequestDto, BindingResult result);
 
     @Operation(summary = "This is endpoint to get all employees.", description = "Create request to get all employees.", tags = {"Employee"})
     @ApiResponses(value = {
