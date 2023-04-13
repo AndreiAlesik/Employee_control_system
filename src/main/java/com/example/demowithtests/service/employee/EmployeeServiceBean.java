@@ -28,6 +28,7 @@ public class EmployeeServiceBean implements EmployeeService {
 
     private final WorkplaceService workplaceService;
 
+
     @Override
     public Employee create(Employee employee) {
         log.debug("Service ==> create() - start: employee = {}", employee);
