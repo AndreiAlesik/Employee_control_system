@@ -136,9 +136,7 @@ public class EmployeeControllerBean implements EmployeeController {
 
     @Override
     public void detachingEmployee(Integer id) {
-
         employeeService.detachEmployee(id);
-
     }
 
     @GetMapping("/metricsForEmployee")
