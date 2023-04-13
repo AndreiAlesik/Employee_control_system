@@ -20,6 +20,13 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(errorDetails, HttpStatus.NOT_FOUND);
     }
 
+    @ExceptionHandler(ValidationException.class)
+    public ResponseEntity<?> validationExceptionFound(ValidationException ve, WebRequest request)
+    {
+        ErrorDetails errorDetails=new ErrorDetails(new Date(), ve.getMessage(), request.getDescription(false));
+        return new ResponseEntity<>(errorDetails, HttpStatus.BAD_REQUEST);
+    }
+
 
     @ExceptionHandler(ResourceWasDeletedException.class)
     protected ResponseEntity<MyGlobalExceptionHandler> handleDeleteException() {

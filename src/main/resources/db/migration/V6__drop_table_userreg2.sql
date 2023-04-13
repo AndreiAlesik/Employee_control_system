@@ -1,0 +1,1 @@
+drop table userreg1 cascade;

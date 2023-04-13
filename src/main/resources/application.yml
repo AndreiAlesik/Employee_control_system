@@ -15,8 +15,27 @@ spring:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
     open-in-view: false
     generate-ddl: true
+  flyway:
+    #    locations: filesystem:.\src\main\resources\db\migration
+    enabled: false
+    #    clean-disabled: true
+    baseline-on-migrate: true
+
 # Server configuration
 server:
   port: 8087 #set your port
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html # swagger-ui custom path
+  api-docs:
+    path: /v3/api-docs.yaml
 
-
+logging:
+  pattern:
+    console: "%d{ISO8601} %-5level %logger{1.} - %msg%n"
+  level:
+    com.example.demowithtests.service: debug
+    com.example.demowithtests.web: info
+    org.springframework: info
+    org.hibernate: info
+    org.apache.catalina.core: info

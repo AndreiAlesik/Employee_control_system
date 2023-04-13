@@ -1,8 +1,8 @@
 package com.example.demowithtests;
 
-import com.example.demowithtests.domain.Employee;
-import com.example.demowithtests.repository.Repository;
-import com.example.demowithtests.web.Controller;
+import com.example.demowithtests.domain.employee.Employee;
+import com.example.demowithtests.repository.EmployeeRepository;
+import com.example.demowithtests.web.employee.EmployeeControllerBean;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Ignore;
 import org.junit.jupiter.api.Test;
@@ -28,8 +28,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringRunner.class)
-@WebMvcTest(Controller.class)
-public class ControllerTests {
+@WebMvcTest(EmployeeControllerBean.class)
+public class EmployeeControllerBeanTests {
 
     @Autowired
     MockMvc mockMvc;
@@ -38,7 +38,7 @@ public class ControllerTests {
     ObjectMapper mapper;
 
     @MockBean
-    Repository repository;
+    EmployeeRepository employeeRepository;
 
     @Ignore
     @Test
@@ -47,7 +47,7 @@ public class ControllerTests {
                 .name("John")
                 .build();
 
-        Mockito.when(repository.save(employee)).thenReturn(employee);
+        Mockito.when(employeeRepository.save(employee)).thenReturn(employee);
 
         MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders.post("/api/users")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -69,7 +69,7 @@ public class ControllerTests {
                 .country("France")
                 .build();
 
-        Mockito.when(repository.findById(employee.getId())).thenReturn(java.util.Optional.of(employee));
+        Mockito.when(employeeRepository.findById(employee.getId())).thenReturn(java.util.Optional.of(employee));
 
         mockMvc.perform(MockMvcRequestBuilders.get("/api/users/1")
                         .contentType(MediaType.APPLICATION_JSON))
@@ -89,9 +89,9 @@ public class ControllerTests {
 
         List<Employee> records = new ArrayList<>(Arrays.asList(employee));
 
-        repository.save(employee);
+        employeeRepository.save(employee);
 
-        Mockito.when(repository.findAll()).thenReturn(records);
+        Mockito.when(employeeRepository.findAll()).thenReturn(records);
 
         mockMvc.perform(MockMvcRequestBuilders
                         .get("/users")

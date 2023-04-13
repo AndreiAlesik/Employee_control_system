@@ -1,8 +1,8 @@
-package com.example.demowithtests.domain;
+package com.example.demowithtests.domain.employee;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.NoArgsConstructor;
+import com.example.demowithtests.domain.office.Workplace;
+import com.example.demowithtests.domain.passport.Passport;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.HashSet;
@@ -13,6 +13,8 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@Getter
+@Setter
 public class Employee {
 
     @Id
@@ -24,10 +26,20 @@ public class Employee {
     private String email;
     private Boolean isDeleted = Boolean.FALSE;
 
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
     @JoinColumn(name = "employee_id")
     private Set<Address> addresses = new HashSet<>();
 
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinColumn(name = "employee_id")
+    private Set<Photo> photos = new HashSet<>();
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "passport_id", referencedColumnName = "id")
+    private Passport passport;
+
+    @ManyToMany(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
+    @ToString.Exclude
+    private Set<Workplace> workplaces=new HashSet<>();
 
     public Boolean getIsDeleted() {
         return isDeleted;
