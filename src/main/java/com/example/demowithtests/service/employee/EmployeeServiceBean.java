@@ -10,8 +10,12 @@ import com.example.demowithtests.util.*;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataAccessException;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
 import javax.persistence.EntityNotFoundException;
+import javax.persistence.PersistenceContext;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,6 +33,8 @@ public class EmployeeServiceBean implements EmployeeService {
     private final WorkplaceService workplaceService;
 
 
+    @PersistenceContext
+    private EntityManager entityManager;
 
     @Override
     public Employee create(Employee employee) {
@@ -186,17 +192,34 @@ public class EmployeeServiceBean implements EmployeeService {
         log.debug("Service ==> addWorkplace() - start: employeeId = {}, workplaceId = {}", employeeId, workplaceId);
         Employee employee = employeeRepository.findById(employeeId)
                 .orElseThrow(ResourceNotFoundException::new);
-        Workplace workplace=workplaceService.getById(workplaceId);
-        if(employeeRepository.checkFreeSittingsInWorkplace(workplaceId)<workplace.getAvailableSittingPlaces() &&
-            workplace.getAvailableSittingPlaces()>0) {
+        Workplace workplace = workplaceService.getById(workplaceId);
+        if (employeeRepository.checkFreeSittingsInWorkplace(workplaceId) < workplace.getAvailableSittingPlaces() &&
+                workplace.getAvailableSittingPlaces() > 0) {
             employee.getWorkplaces().add(workplace);
-            workplace.setAvailableSittingPlaces(workplace.getAvailableSittingPlaces()-1);
+            workplace.setAvailableSittingPlaces(workplace.getAvailableSittingPlaces() - 1);
             employeeRepository.save(employee);
-        }
-        else
+        } else
             throw new ResourceHasNoDataException("No free place in this workplace");
         log.debug("Service ==> addWorkplace() - end: employee = {}", employee);
         return employee;
+    }
+
+    @Transactional
+    public void save(Employee employee) {
+        entityManager.persist(employee);
+    }
+
+    @Transactional(propagation = Propagation.NEVER)
+    public void detachEmployee(Integer id) {
+        entityManager.detach(
+                entityManager.find(Employee.class, id));
+        entityManager.remove(entityManager.find(Employee.class, id));
+    }
+
+
+    @Transactional(propagation = Propagation.NEVER)
+    public void removeEntityManagerEmployee(Integer id) {
+        entityManager.remove(entityManager.find(Employee.class, id));
     }
 
     private void checkIsFree() {

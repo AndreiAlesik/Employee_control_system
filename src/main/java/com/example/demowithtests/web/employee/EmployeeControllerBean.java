@@ -37,6 +37,11 @@ public class EmployeeControllerBean implements EmployeeController {
         return dto;
     }
 
+    @Override
+    public void savePersistence(Employee employee) {
+        employeeService.save(employee);
+    }
+
 
     @GetMapping("/users")
     @ResponseStatus(HttpStatus.OK)
@@ -129,6 +134,13 @@ public class EmployeeControllerBean implements EmployeeController {
         return employeeReadDto;
     }
 
+    @Override
+    public void detachingEmployee(Integer id) {
+
+        employeeService.detachEmployee(id);
+
+    }
+
     @GetMapping("/metricsForEmployee")
     @ResponseStatus(HttpStatus.OK)
     public List<Employee> metrics(@RequestParam String country) {
@@ -138,4 +150,8 @@ public class EmployeeControllerBean implements EmployeeController {
         return statistics;
     }
 
+    @Override
+    public void removeEntityManager(Integer id) {
+        employeeService.removeEntityManagerEmployee(id);
+    }
 }
