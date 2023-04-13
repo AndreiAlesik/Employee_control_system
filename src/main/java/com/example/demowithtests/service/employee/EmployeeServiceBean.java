@@ -216,6 +216,7 @@ public class EmployeeServiceBean implements EmployeeService {
     }
 
 
+
     public void mailSender(List<String> emails, String text) {
         log.info("Emails were successfully sent");
     }
