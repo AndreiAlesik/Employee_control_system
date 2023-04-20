@@ -109,4 +109,13 @@ public interface EmployeeController {
     @PatchMapping("removeEntityManager/{id}")
     @ResponseStatus(HttpStatus.OK)
     void removeEntityManager(@PathVariable("id") Integer id);
+
+
+    @GetMapping("/find/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    EmployeeReadDto findEntityEmployee(@PathVariable("id") Integer id);
+
+    @PutMapping("/mergeEntityManagerEmployee")
+    @ResponseStatus(HttpStatus.OK)
+    EmployeeReadDto mergeEntityEmployee(@RequestBody EmployeeDto employeeDto);
 }

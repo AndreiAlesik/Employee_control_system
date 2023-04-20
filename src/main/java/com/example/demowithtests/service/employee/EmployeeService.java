@@ -31,9 +31,13 @@ public interface EmployeeService {
 
     Employee addWorkplace(Integer employeeId, Integer workplaceId);
 
-    void save(Employee employee);
+    Employee save(Employee employee);
 
     void detachEmployee(Integer id);
 
     void removeEntityManagerEmployee(Integer id);
+
+    Employee findEmployee(Integer id);
+
+    Employee mergeEmployee(Employee employee);
 }

@@ -37,5 +37,5 @@ logging:
     com.example.demowithtests.service: debug
     com.example.demowithtests.web: info
     org.springframework: info
-    org.hibernate: info
-    org.apache.catalina.core: info
+    org.hibernate: off
+    org.apache.catalina.core: off

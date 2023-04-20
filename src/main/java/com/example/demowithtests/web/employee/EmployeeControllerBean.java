@@ -152,4 +152,22 @@ public class EmployeeControllerBean implements EmployeeController {
     public void removeEntityManager(Integer id) {
         employeeService.removeEntityManagerEmployee(id);
     }
+
+    @Override
+    public EmployeeReadDto findEntityEmployee(Integer id) {
+        log.info("Controller ==> findEntityEmployee() - start: id = {}", id);
+        var employee=employeeMapper.employeeToEmployeeReadDto(employeeService.findEmployee(id));
+        log.info("Controller ==> findEntityEmployee() - end: employee = {}", employee);
+        return employee;
+    }
+
+    @Override
+    public EmployeeReadDto mergeEntityEmployee(EmployeeDto employeeDto) {
+        log.info("Controller ==> findEntityEmployee() - start: employeeDto = {}", employeeDto);
+        var employee=employeeMapper.employeeToEmployeeReadDto(
+                employeeService.mergeEmployee(
+                        employeeMapper.employeeDtoToEmployee(employeeDto)));
+        log.info("Controller ==> findEntityEmployee() - end: employee = {}", employee);
+        return employee;
+    }
 }

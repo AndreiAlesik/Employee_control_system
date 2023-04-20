@@ -205,8 +205,9 @@ public class EmployeeServiceBean implements EmployeeService {
     }
 
     @Transactional
-    public void save(Employee employee) {
+    public Employee save(Employee employee) {
         entityManager.persist(employee);
+        return employee;
     }
 
     @Transactional(propagation = Propagation.NEVER)
@@ -216,6 +217,21 @@ public class EmployeeServiceBean implements EmployeeService {
         entityManager.remove(entityManager.find(Employee.class, id));
     }
 
+    @Transactional
+    public Employee findEmployee(Integer id) {
+        log.debug("Service ==> findEmployee() - start: id = {}", id);
+        var entity = entityManager.find(Employee.class, id);
+        log.debug("Service ==> findEmployee() - end: employee = {}", entity);
+        return entity;
+    }
+
+    @Transactional
+    public Employee mergeEmployee(Employee employee) {
+        log.debug("Service ==> findEmployee() - start: employee = {}", employee);
+        var entity=entityManager.merge(employee);
+        log.debug("Service ==> findEmployee() - end: employee = {}", employee);
+        return entity;
+    }
 
     @Transactional(propagation = Propagation.NEVER)
     public void removeEntityManagerEmployee(Integer id) {
