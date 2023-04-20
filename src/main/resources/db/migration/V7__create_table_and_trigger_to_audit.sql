@@ -8,7 +8,6 @@ CREATE TABLE dml_audit (
                            event_time TIMESTAMP
 );
 
-DROP FUNCTION log_dml_event() CASCADE;
 CREATE OR REPLACE FUNCTION log_dml_event()
     RETURNS trigger AS $$
 BEGIN
