@@ -9,9 +9,8 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.example</groupId>
-    <artifactId>demoWithTests</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
-    <name>demoWithTests</name>
+    <artifactId>demo-with-tests</artifactId>
+    <name>demo-with-tests</name>
     <description>demoWithTests</description>
     <properties>
         <java.version>11</java.version>
@@ -119,6 +118,7 @@
     </dependencies>
 
     <build>
+        <finalName>demo-with-tests</finalName>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
@@ -130,6 +130,7 @@
                 <version>8.4.1</version>
             </plugin>
         </plugins>
+
     </build>
 
 </project>
