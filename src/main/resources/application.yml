@@ -17,9 +17,12 @@ spring:
     generate-ddl: true
   flyway:
     #    locations: filesystem:.\src\main\resources\db\migration
-    enabled: false
+    enabled: true
     #    clean-disabled: true
     baseline-on-migrate: true
+    url: jdbc:postgresql://postgres:5432/employee
+    user: postgres
+    password: pass
 
 # Server configuration
 server:
@@ -37,5 +40,5 @@ logging:
     com.example.demowithtests.service: debug
     com.example.demowithtests.web: info
     org.springframework: info
-    org.hibernate: off
-    org.apache.catalina.core: off
+    org.hibernate: info
+    org.apache.catalina.core: info
