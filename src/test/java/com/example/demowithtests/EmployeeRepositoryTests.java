@@ -3,6 +3,7 @@ package com.example.demowithtests;
 import com.example.demowithtests.domain.employee.Employee;
 import com.example.demowithtests.repository.EmployeeRepository;
 import org.assertj.core.api.Assertions;
+import org.junit.Assert;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
@@ -31,6 +32,8 @@ public class EmployeeRepositoryTests {
         employeeRepository.save(employee);
 
         Assertions.assertThat(employee.getId()).isGreaterThan(0);
+        Assertions.assertThat(employee.getName().equals("Mark"));
+        Assertions.assertThat(employee.getId()).isNotNull();
     }
 
     @Test

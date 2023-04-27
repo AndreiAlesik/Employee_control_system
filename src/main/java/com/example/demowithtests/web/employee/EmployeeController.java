@@ -1,5 +1,6 @@
 package com.example.demowithtests.web.employee;
 
+import com.example.demowithtests.domain.employee.Employee;
 import com.example.demowithtests.dto.employee.EmployeeDto;
 import com.example.demowithtests.dto.employee.EmployeeReadDto;
 import io.swagger.v3.oas.annotations.Operation;
@@ -18,6 +19,16 @@ public interface EmployeeController {
     @PostMapping("/users")
     @ResponseStatus(HttpStatus.CREATED)
     EmployeeDto saveEmployee(@RequestBody EmployeeDto employeeDto);
+
+    @Operation(summary = "This is endpoint to add a new employee.", description = "Create request to add a new employee.", tags = {"Employee"})
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "CREATED. The new employee is successfully created and added to database."),
+            @ApiResponse(responseCode = "400", description = "Invalid input"),
+            @ApiResponse(responseCode = "404", description = "NOT FOUND. Specified employee request not found."),
+            @ApiResponse(responseCode = "409", description = "Employee already exists")})
+    @PostMapping("/persistSave")
+    @ResponseStatus(HttpStatus.CREATED)
+    void savePersistence(Employee employee);
 
     @Operation(summary = "This is endpoint to get all employees.", description = "Create request to get all employees.", tags = {"Employee"})
     @ApiResponses(value = {
@@ -90,4 +101,21 @@ public interface EmployeeController {
     @PostMapping("/employee/{id}/workplace/{workplaceId}")
     @ResponseStatus(HttpStatus.OK)
     EmployeeReadDto addWorkplace(@PathVariable("id") Integer id, @PathVariable("workplaceId") Integer workplaceId);
+
+    @GetMapping("/detach/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    void detachingEmployee(@PathVariable("id") Integer id);
+
+    @PatchMapping("removeEntityManager/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    void removeEntityManager(@PathVariable("id") Integer id);
+
+
+    @GetMapping("/find/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    EmployeeReadDto findEntityEmployee(@PathVariable("id") Integer id);
+
+    @PutMapping("/mergeEntityManagerEmployee")
+    @ResponseStatus(HttpStatus.OK)
+    EmployeeReadDto mergeEntityEmployee(@RequestBody EmployeeDto employeeDto);
 }
