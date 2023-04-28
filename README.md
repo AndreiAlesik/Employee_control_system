@@ -17,6 +17,7 @@ The tests cover both unit and integration testing, ensuring the reliability and 
 - Lombok<br>
 - Swagger<br>
 - mapStruct<br>
+- flywat<br>
 
 ## Installation<br>
 
@@ -30,5 +31,5 @@ To install the app, follow these steps:<br>
 
 To use the app, follow these steps:<br>
 
-1. Open the Swagger UI in your web browser: `http://localhost:8080/swagger-ui.html`.<br>
+1. Open the Swagger UI in your web browser: `http://localhost:8087/swagger-ui.html`.<br>
 2. Use the API endpoints to perform CRUD operations on the database.<br>
