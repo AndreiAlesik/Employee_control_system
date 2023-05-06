@@ -10,6 +10,9 @@ import com.example.demowithtests.util.*;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataAccessException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -32,6 +35,7 @@ public class EmployeeServiceBean implements EmployeeService {
 
     private final WorkplaceService workplaceService;
 
+    private final PasswordEncoder passwordEncoder;
 
     @PersistenceContext
     private EntityManager entityManager;
@@ -40,9 +44,18 @@ public class EmployeeServiceBean implements EmployeeService {
     public Employee create(Employee employee) {
         log.debug("Service ==> create() - start: employee = {}", employee);
         employee.setIsDeleted(Boolean.FALSE);
+        employee.setPassword(passwordEncoder.encode(employee.getPassword()));
         Employee employeeCreated = employeeRepository.save(employee);
         log.debug("Service ==> create() - end: employee = {}", employeeCreated);
         return employeeCreated;
+    }
+
+    @Override
+    public Page<Employee> getAllWithPagination(Pageable pageable) {
+        log.debug("getAllWithPagination() - start: pageable = {}", pageable);
+        Page<Employee> list = employeeRepository.findAll(pageable);
+        log.debug("getAllWithPagination() - end: list = {}", list);
+        return list;
     }
 
     @Override

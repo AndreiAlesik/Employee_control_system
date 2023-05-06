@@ -9,7 +9,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Table(name = "users")
+@Table(name = "employee")
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
@@ -20,11 +20,14 @@ public class Employee {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-
     private String name;
     private String country;
     private String email;
+
+    private String password;
     private Boolean isDeleted = Boolean.FALSE;
+
+
 
     @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
     @JoinColumn(name = "employee_id")
