@@ -31,4 +31,6 @@ public interface EmployeeRepository extends JpaRepository<Employee, Integer> {
             "select count(*) from users_workplaces where workplaces_id=:workplaceID"
             , nativeQuery = true)
     Integer checkFreeSittingsInWorkplace(Integer workplaceID);
+
+    Employee findEmployeeByEmail(String email);
 }
