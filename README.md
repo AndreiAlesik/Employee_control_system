@@ -17,7 +17,7 @@ The tests cover both unit and integration testing, ensuring the reliability and 
 - Lombok<br>
 - Swagger<br>
 - mapStruct<br>
-- flywat<br>
+- flyway<br>
 
 ## Installation<br>
 
