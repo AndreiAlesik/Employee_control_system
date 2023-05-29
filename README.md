@@ -28,7 +28,7 @@ To install the app, follow these steps:<br>
 2. Run `mvn clean install` to install the required dependencies.<br>
 3. Start the application using `mvn spring-boot:run`.<br>
 
-You can also run aplication in docker by using next instruction.<br>
+You can also run application in docker by following next instruction.<br>
 1. Clone the repository.<br>
 2. Compile project by using `mvn clean install`.<br>
 3. Run docker on your computer.<br>
