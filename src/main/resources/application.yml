@@ -17,16 +17,16 @@ spring:
     generate-ddl: true
   flyway:
     #    locations: filesystem:.\src\main\resources\db\migration
-    enabled: true
+    enabled: false
     #    clean-disabled: true
-    baseline-on-migrate: true
+    baseline-on-migrate: false
     url: jdbc:postgresql://postgres:5432/employee
     user: postgres
     password: pass
 
 # Server configuration
 server:
-  port: 8087 #set your port
+  port: 8089 #set your port
 springdoc:
   swagger-ui:
     path: /swagger-ui.html # swagger-ui custom path

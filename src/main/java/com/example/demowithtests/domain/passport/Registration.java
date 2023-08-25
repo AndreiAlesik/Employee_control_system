@@ -2,7 +2,7 @@ package com.example.demowithtests.domain.passport;
 
 import lombok.*;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.time.Instant;
 import java.util.Date;
 import java.util.UUID;

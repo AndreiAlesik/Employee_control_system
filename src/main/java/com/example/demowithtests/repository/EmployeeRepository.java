@@ -1,8 +1,10 @@
 package com.example.demowithtests.repository;
 
 import com.example.demowithtests.domain.employee.Employee;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
@@ -33,4 +35,18 @@ public interface EmployeeRepository extends JpaRepository<Employee, Integer> {
     Integer checkFreeSittingsInWorkplace(Integer workplaceID);
 
     Employee findEmployeeByEmail(String email);
+
+    List<Employee> findEmployeeByNameContaining(String name);
+
+    @Query(value = "select e from Employee e join e.addresses where lower(e.name) like lower(concat('%', :name, '%')) ")
+    List<Employee> findEmployeeByNameJPQL(@Param("name") String name);
+
+    @Query(value = "select e from Employee e where lower(e.name) like lower(concat('%', :name, '%'))")
+    @EntityGraph(attributePaths = {"addresses"})
+    List<Employee> findEmployeeByNameJPQLAndEntityGraph(@Param("name") String name);
+
+    @Query(value = "select u.* from users u left join addresses a on u.id=a.employee_id where lower(u.name) like lower(concat('%', :name, '%'))", nativeQuery = true)
+    List<Employee> findEmployeeByNameNativeSQL(@Param("name") String name);
+
+
 }

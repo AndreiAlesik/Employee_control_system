@@ -2,7 +2,6 @@ package com.example.demowithtests.service.workplace;
 
 
 import com.example.demowithtests.domain.office.Workplace;
-import com.example.demowithtests.domain.passport.Passport;
 import com.example.demowithtests.repository.WorkplaceRepository;
 import com.example.demowithtests.util.ResourceNotFoundException;
 import lombok.AllArgsConstructor;

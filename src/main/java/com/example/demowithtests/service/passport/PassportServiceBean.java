@@ -3,16 +3,12 @@ package com.example.demowithtests.service.passport;
 import com.example.demowithtests.domain.passport.Passport;
 import com.example.demowithtests.domain.passport.Registration;
 import com.example.demowithtests.repository.PassportRepository;
-import com.example.demowithtests.util.AccessException;
 import com.example.demowithtests.util.ResourceNotFoundException;
-import com.example.demowithtests.util.WrongArgumentException;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.EntityExistsException;
-import javax.persistence.EntityNotFoundException;
+
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;

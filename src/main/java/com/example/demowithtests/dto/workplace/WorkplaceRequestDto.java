@@ -1,23 +1,16 @@
 package com.example.demowithtests.dto.workplace;
 
-import com.example.demowithtests.domain.employee.Employee;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.ToString;
-import org.springframework.beans.factory.annotation.Required;
 
-import javax.persistence.CascadeType;
-import javax.persistence.ManyToMany;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotNull;
-import java.time.OffsetDateTime;
-import java.util.HashSet;
-import java.util.Set;
+import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
+import lombok.ToString;
+
+
 
 @ToString
 public class WorkplaceRequestDto {
-//    @Schema(description = "Id of a workplace.", example = "id")
-//    public Integer id;
+
 
     @NotNull
     @Schema(description = "Name of a workplace.", example = "name")

@@ -1,12 +1,15 @@
 package com.example.demowithtests.service.employee;
 
+import com.example.demowithtests.domain.employee.Address;
 import com.example.demowithtests.domain.employee.Employee;
 import com.example.demowithtests.domain.office.Workplace;
+import com.example.demowithtests.dto.StatsObject;
 import com.example.demowithtests.repository.EmployeeRepository;
 import com.example.demowithtests.repository.PassportRepository;
 import com.example.demowithtests.service.passport.PassportService;
 import com.example.demowithtests.service.workplace.WorkplaceService;
 import com.example.demowithtests.util.*;
+import com.github.javafaker.Faker;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataAccessException;
@@ -16,11 +19,11 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityNotFoundException;
-import javax.persistence.PersistenceContext;
-import java.util.ArrayList;
-import java.util.List;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityNotFoundException;
+import jakarta.persistence.PersistenceContext;
+
+import java.util.*;
 
 @AllArgsConstructor
 @Slf4j
@@ -35,7 +38,7 @@ public class EmployeeServiceBean implements EmployeeService {
 
     private final WorkplaceService workplaceService;
 
-    private final PasswordEncoder passwordEncoder;
+
 
     @PersistenceContext
     private EntityManager entityManager;
@@ -44,7 +47,6 @@ public class EmployeeServiceBean implements EmployeeService {
     public Employee create(Employee employee) {
         log.debug("Service ==> create() - start: employee = {}", employee);
         employee.setIsDeleted(Boolean.FALSE);
-        employee.setPassword(passwordEncoder.encode(employee.getPassword()));
         Employee employeeCreated = employeeRepository.save(employee);
         log.debug("Service ==> create() - end: employee = {}", employeeCreated);
         return employeeCreated;
@@ -262,7 +264,6 @@ public class EmployeeServiceBean implements EmployeeService {
 
     private static List<String> extracted(List<Employee> employees) {
         List<String> emails = new ArrayList<>();
-        //Arrays.asList();
         for (Employee emp : employees) {
             emails.add(emp.getEmail());
         }
@@ -273,5 +274,94 @@ public class EmployeeServiceBean implements EmployeeService {
 
     public void mailSender(List<String> emails, String text) {
         log.info("Emails were successfully sent");
+    }
+
+    @Override
+    public void generateData() {
+        List<Employee> employees = createListEmployees();
+        employeeRepository.saveAll(employees);
+    }
+
+    /**
+     * @return
+     */
+    @Override
+    public long count() {
+        return employeeRepository.count();
+    }
+
+    public List<Employee> createListEmployees() {
+
+        List<Employee> employees = new ArrayList<>();
+        long seed = 1;
+
+        Faker faker = new Faker(new Locale("en"), new Random(seed));
+        for (int i = 0; i < 100_000; i++) {
+
+            String name = faker.name().name();
+            String country = faker.country().name();
+            String email = faker.name().name();
+
+            Set<Address> addresses = Set.copyOf(Arrays.asList(new Address(), new Address()));
+
+            Employee employee = Employee
+                    .builder()
+                    .name(name)
+                    .country(country)
+                    .email(email.toLowerCase().replaceAll(" ", "") + "@mail.com")
+                    .addresses(addresses)
+                    .build();
+
+            employees.add(employee);
+        }
+
+        return employees;
+    }
+
+    @Override
+    public StatsObject<List<Employee>> findEmployeeByName(String name) {
+        long startTime = System.currentTimeMillis();
+
+        var employee = employeeRepository.findEmployeeByNameContaining(name);
+
+        long endTime = System.currentTimeMillis();
+        double executionTimeSeconds = (endTime - startTime) / 1000.0;
+        String executionTimeString = String.format("%.2f", executionTimeSeconds);
+
+        return new StatsObject<>(executionTimeString+" s", null);
+    }
+
+
+    @Override
+    public StatsObject<List<Employee>> findEmployeeByNameJPQL(String name) {
+        long startTime = System.currentTimeMillis();
+        var employee=employeeRepository.findEmployeeByNameJPQL(name);
+        long endTime = System.currentTimeMillis();
+        double executionTimeSeconds = (endTime - startTime) / 1000.0;
+        String executionTimeString = String.format("%.2f", executionTimeSeconds);
+
+        return new StatsObject<>(executionTimeString+" s", null);
+    }
+
+    @Override
+    public StatsObject<List<Employee>> findEmployeeByNameJPQLAndEntityGraph(String name) {
+        long startTime = System.currentTimeMillis();
+        var employee=employeeRepository.findEmployeeByNameJPQLAndEntityGraph(name);
+        long endTime = System.currentTimeMillis();
+        double executionTimeSeconds = (endTime - startTime) / 1000.0;
+        String executionTimeString = String.format("%.2f", executionTimeSeconds);
+
+        return new StatsObject<>(executionTimeString+" s", null);
+    }
+
+    @Override
+    public StatsObject<List<Employee>> findEmployeeByNameNativeSQL(String name) {
+        long startTime = System.currentTimeMillis();
+        var employee=employeeRepository.findEmployeeByNameNativeSQL(name);
+        long endTime = System.currentTimeMillis();
+        double executionTimeSeconds = (endTime - startTime) / 1000.0;
+        String executionTimeString = String.format("%.2f", executionTimeSeconds);
+
+        return new StatsObject<>(executionTimeString+" s", null);
     }
 }

@@ -2,6 +2,7 @@ package com.example.demowithtests.service.employee;
 
 import com.example.demowithtests.domain.employee.Employee;
 import com.example.demowithtests.domain.office.Workplace;
+import com.example.demowithtests.dto.StatsObject;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -44,4 +45,16 @@ public interface EmployeeService {
     Employee mergeEmployee(Employee employee);
 
     Page<Employee> getAllWithPagination(Pageable pageable);
+
+    void generateData();
+
+    long count();
+
+    StatsObject<List<Employee>> findEmployeeByName(String name);
+
+    StatsObject<List<Employee>> findEmployeeByNameJPQL(String name);
+
+    StatsObject<List<Employee>> findEmployeeByNameJPQLAndEntityGraph(String name);
+
+    StatsObject<List<Employee>> findEmployeeByNameNativeSQL(String name);
 }

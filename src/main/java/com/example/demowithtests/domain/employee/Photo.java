@@ -2,7 +2,7 @@ package com.example.demowithtests.domain.employee;
 
 import lombok.*;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.time.Instant;
 import java.util.Date;
 
