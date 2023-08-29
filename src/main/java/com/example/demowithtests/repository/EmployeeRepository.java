@@ -3,13 +3,15 @@ package com.example.demowithtests.repository;
 import com.example.demowithtests.domain.employee.Employee;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-@org.springframework.stereotype.Repository
-//@Component
+@Repository
 public interface EmployeeRepository extends JpaRepository<Employee, Integer> {
 
     Employee findByName(String name);
@@ -48,5 +50,21 @@ public interface EmployeeRepository extends JpaRepository<Employee, Integer> {
     @Query(value = "select u.* from users u left join addresses a on u.id=a.employee_id where lower(u.name) like lower(concat('%', :name, '%'))", nativeQuery = true)
     List<Employee> findEmployeeByNameNativeSQL(@Param("name") String name);
 
+    @Modifying(flushAutomatically = true, clearAutomatically = true)
+    @Query(value = "update users set email=:email where id=:id", nativeQuery = true)
+    @Transactional
+    void updateEmployeeEmailById(@Param("email") String email, @Param("id") Integer id);
 
+    @Modifying(flushAutomatically = true, clearAutomatically = true)
+    @Query(value = "delete from users where email=:email", nativeQuery = true)
+    @Transactional
+    void deleteEmployeeByEmail(@Param("email") String email);
+
+    @Modifying(flushAutomatically = true, clearAutomatically = true)
+    @Query(value = "insert INTO users (country, email, name) " +
+            "VALUES (country, email, name)", nativeQuery = true)
+    @Transactional
+    void createEmployeeBySQL(@Param("country") String country,
+                            @Param("email") String email,
+                            @Param("name") String name);
 }

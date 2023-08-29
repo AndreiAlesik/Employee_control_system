@@ -1,7 +1,6 @@
 package com.example.demowithtests.service.employee;
 
 import com.example.demowithtests.domain.employee.Employee;
-import com.example.demowithtests.domain.office.Workplace;
 import com.example.demowithtests.dto.StatsObject;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -57,4 +56,10 @@ public interface EmployeeService {
     StatsObject<List<Employee>> findEmployeeByNameJPQLAndEntityGraph(String name);
 
     StatsObject<List<Employee>> findEmployeeByNameNativeSQL(String name);
+
+    void updateEmployeeEmailById(String email, Integer id);
+
+    void deleteEmployeeByEmail(String email);
+
+    void createEmployeeById(Employee employee);
 }

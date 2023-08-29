@@ -3,6 +3,7 @@ package com.example.demowithtests.util.mapper;
 import com.example.demowithtests.domain.employee.Address;
 import com.example.demowithtests.domain.employee.Employee;
 import com.example.demowithtests.dto.employee.AddressDto;
+import com.example.demowithtests.dto.employee.EmployeeCreateDto;
 import com.example.demowithtests.dto.employee.EmployeeDto;
 import com.example.demowithtests.dto.employee.EmployeeReadDto;
 import org.mapstruct.Mapper;
@@ -25,4 +26,6 @@ public interface EmployeeMapper {
 
     Set<AddressDto> addressToAddressDto(Set<Address> address);
     Address addressDtoToAddress(AddressDto address);
+
+    Employee fromCreateDto(EmployeeCreateDto employeeCreateDto);
 }

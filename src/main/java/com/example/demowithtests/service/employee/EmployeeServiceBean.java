@@ -15,7 +15,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -363,5 +362,20 @@ public class EmployeeServiceBean implements EmployeeService {
         String executionTimeString = String.format("%.2f", executionTimeSeconds);
 
         return new StatsObject<>(executionTimeString+" s", null);
+    }
+
+    @Override
+    public void updateEmployeeEmailById(String email, Integer id) {
+        employeeRepository.updateEmployeeEmailById(email, id);
+    }
+
+    @Override
+    public void deleteEmployeeByEmail(String email) {
+        employeeRepository.deleteEmployeeByEmail(email);
+    }
+
+    @Override
+    public void createEmployeeById(Employee employee) {
+        employeeRepository.createEmployeeBySQL(employee.getCountry(), employee.getEmail(), employee.getName());
     }
 }

@@ -2,14 +2,13 @@ package com.example.demowithtests.web.performance;
 
 import com.example.demowithtests.domain.employee.Employee;
 import com.example.demowithtests.dto.StatsObject;
+import com.example.demowithtests.dto.employee.EmployeeCreateDto;
 import com.example.demowithtests.service.employee.EmployeeService;
+import com.example.demowithtests.util.mapper.EmployeeMapper;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -20,9 +19,11 @@ import java.util.List;
 @Slf4j
 public class PerformanceControllerBean implements PerformanceController{
     private final EmployeeService employeeService;
+    private final EmployeeMapper employeeMapper;
 
-    public PerformanceControllerBean(EmployeeService employeeService) {
+    public PerformanceControllerBean(EmployeeService employeeService, EmployeeMapper employeeMapper) {
         this.employeeService = employeeService;
+        this.employeeMapper = employeeMapper;
     }
 
     @Override
@@ -51,6 +52,22 @@ public class PerformanceControllerBean implements PerformanceController{
         String count = "Amount clients: " + employeeService.count();
         log.info("fillDataBase() LoaderController - end: count = {}", count);
         return count;
+    }
+
+    @Override
+    public void updateEmployeeEmailById(String email, Integer id) {
+        employeeService.updateEmployeeEmailById(email, id);
+    }
+
+    @Override
+    public void deleteEmployeeByEmail(String email) {
+        employeeService.deleteEmployeeByEmail(email);
+    }
+
+    @Override
+    public void createEmployeeById(EmployeeCreateDto employeeCreateDto) {
+        var employee=employeeMapper.fromCreateDto(employeeCreateDto);
+        employeeService.createEmployeeById(employee);
     }
 }
 

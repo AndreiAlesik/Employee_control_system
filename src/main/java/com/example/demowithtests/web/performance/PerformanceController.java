@@ -2,11 +2,11 @@ package com.example.demowithtests.web.performance;
 
 import com.example.demowithtests.domain.employee.Employee;
 import com.example.demowithtests.dto.StatsObject;
+import com.example.demowithtests.dto.employee.EmployeeCreateDto;
 import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.security.core.parameters.P;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -34,4 +34,13 @@ public interface PerformanceController {
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("/users/fill")
     String fillDataBase();
+
+    @PutMapping("/update-email/{email}/{id}")
+    void updateEmployeeEmailById(@PathVariable("email") String email, @PathVariable("id") Integer id);
+
+    @DeleteMapping("/delete-by-email/{email}")
+    void deleteEmployeeByEmail(@PathVariable("email") String email);
+
+    @PostMapping("/create")
+    void createEmployeeById(@RequestBody EmployeeCreateDto EmployeeCreateDto);
 }
