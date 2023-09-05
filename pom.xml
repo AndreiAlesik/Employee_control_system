@@ -10,14 +10,15 @@
     </parent>
 
     <groupId>com.example</groupId>
-    <artifactId>demo-with-tests</artifactId>
-    <name>demo-with-tests</name>
-    <description>demoWithTests</description>
+    <artifactId>employee-control-system</artifactId>
+    <name>employee-control-system</name>
+    <description>employee-control-system</description>
     <properties>
         <java.version>17</java.version>
         <org.mapstruct.version>1.5.3.Final</org.mapstruct.version>
         <org.projectlombok.version>1.18.20</org.projectlombok.version>
         <lombok-mapstruct-binding.version>0.2.0</lombok-mapstruct-binding.version>
+        <keycloak.version>21.0.2</keycloak.version>
     </properties>
     <dependencies>
         <!-- spring-boot-starter-data-jpa -->
@@ -145,6 +146,22 @@
             <version>3.0.2</version>
         </dependency>
 
+        <!--Keycloak-->
+        <dependency>
+            <groupId>org.keycloak</groupId>
+            <artifactId>keycloak-spring-boot-starter</artifactId>
+            <version>${keycloak.version}</version>
+        </dependency>
+
+        <!--OAuth2 -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-oauth2-client</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-oauth2-resource-server</artifactId>
+        </dependency>
     </dependencies>
 
     <build>

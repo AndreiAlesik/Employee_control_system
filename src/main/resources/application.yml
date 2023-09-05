@@ -24,6 +24,12 @@ spring:
     user: postgres
     password: pass
 
+  security:
+    oauth2:
+      resource-server:
+        jwt:
+          issuer-uri: http://localhost:8180/realms/automobile-realm
+
 # Server configuration
 server:
   port: 8089 #set your port
